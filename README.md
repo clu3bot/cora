@@ -4,5 +4,5 @@ cora - advanced tool kit
 
 # Credits
 ```
-@mangeshrex    -     Part of the code from rxfetch
+@mangeshrex    -     Pieces of code from rxfetch
 ```
