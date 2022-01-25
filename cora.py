@@ -1016,8 +1016,8 @@ def sysinfo():
 #funtion to find the public ip of the user
 
 def publicip():
-    os.system("curl ipinfo.io/ip > /tmp/test.txt")
-    var = sp.getoutput("cat /tmp/test.txt")
+    os.system("curl ipinfo.io/ip > /tmp/ip.txt")
+    var = sp.getoutput("cat /tmp/ip.txt")
     clear()
     print("Your public IP address is:"+color.green+var+color.none)
     input("\nPress any key to return to main menu..")
