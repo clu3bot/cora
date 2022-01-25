@@ -1,0 +1,37 @@
+Project Code name - Cora                                                       
+                                                                                
+License - MIT                                                                  
+This program is opensource, meaning, free to use, edit, and distribute.        
+Brought to you by  (clu3bot on github)                                         
+Project start date - November 5th 2021                                         
+Public Beta release date -                                                     
+                                                                                
+No Responsibily Disclaimer:                                                    
+                                                                                
+Cora is a proof of concept tool to make easy of use of various tasks related   
+to network security, bluetooth security, and hardware.                          
+This program is in beta and bugs should be anticipated.                        
+Brennan McCown (clu3bot) and affiliates take no responsibily for any damage    
+caused by this program. Including, but not limited to:                         
+Damage to computer devices (i), Personal Computers(ii).                        
+                                                                                
+                                                                                
+Any use of this program (iii) is intended for educational purposes only.       
+The  foundation, employees/partners of clu3bot, github Contributors,           
+and other third parties included, will not be held                             
+accoutable or responsible for any misuse of this program (iii).                
+The end user of this program (iii) is responsible for understanding            
+and acknowledging his/her local laws as well as regulations regarding          
+all FCC (Federal Communications Commission) laws and regulations.              
+                                                                                
+In regards to errors and omissions, Brennan McCown takes on no obligation      
+to ensure this program (iii) from operating as intended or without error.      
+This software is provided 'as is'.                                             
+                                                                               
+** i.) Any electronic device the does or does no connect the internet.         
+** ii.) Any electronic device used for personal or business.                   
+** iii.) Cora framework and all programs and files included within.            
+                                                                                
+Do not remove this header.                                                     
+Cora Version 1.0 Beta, Brennan McCown (clu3bot) 2021                           
+                                                                                
