@@ -39,6 +39,7 @@
 ##################################################################################
 
 
+from asyncio import subprocess
 import sys
 import random as rd
 import os
@@ -1026,9 +1027,34 @@ def publicip():
 def deselectnet():
     print ("deselect net")
 
+
+#check if a computer only has ethernet
+
+
+#check the current interface mode of a wireless 
+ 
+class getinterface :
+    interface = sp.getoutput("cat tmp/var.txt")
+
+#show the interface mode
+def showinterface():
+    clear()
+    print ("Currently Selected Interface:"+color.green+getinterface.interface+color.none)
+    
+    print ("\n\n[1] Main Menu\n")
+    yn = input ("Select an Option: ")
+    if yn == '1':
+        main_menu()
+    else:
+        clear()
+        print ("Invalid Option")
+        time.sleep(1)
+        showinterface()
+    
 #function to call script for selecting a network and setting network name to a var
 def selectnet():
-    os.system("echo select network")
+    os.system("sudo bash scrp/iface.sh")
+    main_menu()
 
 #function to get the monitor mode and set to a variable
 
@@ -1038,11 +1064,26 @@ def getmonitormode():
 
 #functions for monitor mode
 
+def checkvar():
+    if getinterface.interface == '' :
+        print ("Cannot continue no interface selected..")
+        time.sleep(1)
+        print ("Returning to Main Menu..")
+        time.sleep(2)
+        main_menu()
+    else:
+        time.sleep(0.1) 
+
 def monitoron():
-    os.system("echo monitor on")
+    checkvar()
+    os.system("sudo ifconfig "+getinterface.interface+"up")
+    os.system("sudo airmon-ng start "+getinterface.interface)
+
+    #left off trying to find a way to update the interface variable in order to change interface variable from update after one of these options is chosen
 
 def monitoroff():
-    os.system("echo monitor off")
+    os.system("sudo ifconfig "+getinterface.interface+"up")
+    os.system("sudo airmon-ng stop "+getinterface.interface)
 
 #functions for spoofing mac#
 
@@ -1061,7 +1102,7 @@ spoofmenu_actions  = {}
 def spoof_menu():
 
     handleexit()
-    var = sp.getoutput("cat temp/var.txt")
+    var = sp.getoutput("cat tmp/var.txt")
     clear()
     print ("Mac Adress Options")
     print ("By "+nvar.user+", "+nvar.date)
@@ -1129,19 +1170,19 @@ spoofmenu_actions = {
 #tool keyword flags
 
 class exceptedformacspoof:
-    wordlist = ['macaddress', 'macspoof', 'spoofmac', 'mac', 'mac address', 'mac spoof', 'spoof mac', 'spoof mac address', 'macspoof', 'spoofmac', 'change mac', 'change mac address', 'change macaddress']
+    wordlist = ['macaddress', 'macspoof', 'spoofmac', 'mac', 'mac address', 'mac spoof', 'spoof mac', 'spoof mac address', 'macspoof', 'spoofmac', 'change mac', 'change mac address', 'change macaddress', 'mac changer', 'mac address changer', 'macchanger']
 
 class exceptedformonitor:
-    worldlist = ['monitor', 'monitor mode', 'monitormode', 'disable monitor mode', 'disable monitor', 'disablemonitor', 'disablemonitormode', 'network mode', 'managed mode', 'managed mode']
+    worldlist = ['monitor', 'monitor mode', 'monitormode', 'disable monitor mode', 'disable monitor', 'disablemonitor', 'disablemonitormode', 'network mode', 'managed mode', 'managed mode', 'interface', 'interface mode']
 
 class exceptedfornetworkselect:
     worldlist = ['target network', 'select network', 'select a network', 'network select', 'selection for network', 'target a network', 'network target', 'wifi target', 'target wifi', 'network selection']
 
 class exceptedforip: 
-    wordlist = ['find ip', 'search ip', 'public ip', 'show ip', 'show public ip', 'showip', 'publicip']
+    wordlist = ['ip', 'find ip', 'search ip', 'public ip', 'show ip', 'show public ip', 'showip', 'publicip']
 
 class exceptedforsysteminfo: 
-    wordlist = ['ip', 'system', 'system info', 'info system', 'sys', 'sys info', 'sysinfo', 'systeminfo', 'infosystem', 'show sys info', 'show system info', 'system information', 'specs', 'spec', 'system specs']
+    wordlist = ['system', 'system info', 'info system', 'sys', 'sys info', 'sysinfo', 'systeminfo', 'infosystem', 'show sys info', 'show system info', 'system information', 'specs', 'spec', 'system specs']
 
 def macspoof():
     print ("Tools Found:")
@@ -1165,6 +1206,7 @@ def monitormode():
     print ("Tools Found:")
     print ("[1] Turn Monitor Mode on")
     print ("[2] Turn Monitor Mode off")
+    print ("[3] Show Current Interface")
     print ("\n\n\n[b] Search Again")
     print ("[x] Main Menu")
     yesno = input("Select an Option: ")
@@ -1177,6 +1219,8 @@ def monitormode():
         monitoron()
     elif yn == '2' :
         monitoroff()
+    elif yn == '3' :
+        showinterface()
     else:
         clear()
         print("invalid option")
@@ -1186,6 +1230,7 @@ def networkselection():
     print ("Tools Found:")
     print ("[1] Select a Network to Target")
     print ("[2] Deselct a Network")
+    print ("[3] Show Currently Selected Network")
     print ("\n\n\n[b] Search Again")
     print ("[x] Main Menu")
     yesno = input("Select an Option: ")
@@ -1198,6 +1243,8 @@ def networkselection():
         selectnet()
     elif yn == '2' :
         deselectnet()
+    elif yn == '3' :
+        showinterface()
     else:
         clear()
         print("invalid option")
@@ -1265,8 +1312,8 @@ def searchtool(searchvalue):
     elif sv in exceptedforsysteminfo.wordlist :
         systeminfo()
     else:
-        print("The tool you have searched for was unable to be found. Try being more specific (Common names of tools.)")
-        time.sleep(3.5)
+        print("The tool you have searched for "+color.red+sv+color.none+" was unable to be found. Try being more specific (Common names of tools.)")
+        time.sleep(4.5)
         searchvar()
     
 def searchvar():
@@ -1283,11 +1330,11 @@ menu_actions  = {}
 def main_menu():
 
     handleexit()
-    var = sp.getoutput("cat temp/var.txt")
+    var = sp.getoutput("cat tmp/var.txt")
     clear()
     print ("Cora")
     print ("By "+nvar.user+", "+nvar.date)
-    print ("Detailed documentation on the cora wiki found on https://github.com/chimerafoundation/befw\n\n")   ##fix 
+    print ("Detailed documentation on the cora wiki found on https://github.com/clu3bot/cora\n\n")   ##fix 
     print ("[0] Search for a tool.\n")
     print ("[1] WiFi Tools"+"               [8] Spoof Mac Adress")
     print ("[2] Bluetooth Tools"+"          [9] Enable Monitor Mode")  
@@ -1375,17 +1422,17 @@ def option8():
 def option9():
     print ("option 9")
     time.sleep(2)
-    main_menu()
+    monitoron()
 
 def option10():
     print ("option 10")
     time.sleep(2)
-    main_menu()
+    monitoroff()
 
 def option11():
     print ("option 11")
     time.sleep(2)
-    main_menu()
+    selectnet()
 
 def option12():
     print ("option 12")
@@ -1395,7 +1442,7 @@ def option12():
 def option13():
     print ("option 13")
     time.sleep(2)
-    main_menu()
+    sysinfo()
 
 def update():
     print("updates")
@@ -1428,7 +1475,7 @@ def onstartup():
     clear()
     initialload = "loading "
     print (initialload + nvar.project)
-    time.sleep(2)
+    time.sleep(0.5)
     if os.path.isfile("install.sh"):
         print ("please run the install.sh file in the "+nvar.project+"/ directory")
     else:
