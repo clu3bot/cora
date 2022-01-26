@@ -48,6 +48,8 @@ import threading as thd
 import subprocess as sp
 import signal
 import os.path
+from unicodedata import name
+from webbrowser import get
 
 #vars for script
 class nvar:
@@ -1018,6 +1020,7 @@ def sysinfo():
 def publicip():
     os.system("curl ipinfo.io/ip > /tmp/ip.txt")
     var = sp.getoutput("cat /tmp/ip.txt")
+    os.system("rm -rf /tmp/ip.txt")
     clear()
     print("Your public IP address is:"+color.green+var+color.none)
     input("\nPress any key to return to main menu..")
@@ -1030,17 +1033,36 @@ def deselectnet():
 
 #check if a computer only has ethernet
 
+def checkether():
+    if getinterface.interface == 'eth0':
+        print ("eth0")
+    elif getinterface.interface == 'eth1':
+        print ("eth1")
+    elif getinterface.interface == 'eth2':
+        print ("eth2")
+    elif getinterface.interface == 'eth3':
+        print ("eth3")
+    else:
+        time.sleep(2)
 
 #check the current interface mode of a wireless 
  
 class getinterface :
     interface = sp.getoutput("cat tmp/var.txt")
 
+def handlenamechange():
+    flag = 'mon'
+    if flag in getinterface.interface :
+        namechange = getinterface.interface+flag
+    else:
+        namechange = getinterface.interface
+    return namechange
+
 #show the interface mode
 def showinterface():
     clear()
-    print ("Currently Selected Interface:"+color.green+getinterface.interface+color.none)
-    
+    nc = handlenamechange()
+    print ("Currently Selected Interface:"+color.green+nc+color.none)
     print ("\n\n[1] Main Menu\n")
     yn = input ("Select an Option: ")
     if yn == '1':
