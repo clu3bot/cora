@@ -32,6 +32,6 @@ This software is provided 'as is'.
 ** ii.) Any electronic device used for personal or business.                   
 ** iii.) Cora framework and all programs and files included within.            
                                                                                 
-Do not remove this header.                                                     
-Cora Version 1.0 Beta, Brennan McCown (clu3bot) 2021                           
+Do not remove this file.                                                     
+Cora Version 1.0-, Brennan McCown (clu3bot) 2021                           
                                                                                 
