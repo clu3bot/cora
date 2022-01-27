@@ -51,6 +51,7 @@ import os.path
 from unicodedata import name
 from webbrowser import get
 
+
 #vars for script
 class nvar:
     version="1.0 Beta"
@@ -1027,41 +1028,53 @@ def publicip():
     main_menu()
 
 #deselects a network
-def deselectnet():
+def deselectint():
     print ("deselect net")
 
 
 #check if a computer only has ethernet
 
 def checkether():
-    if getinterface.interface == 'eth0':
+    iface = getinterface()
+    if iface == 'eth0':
         print ("eth0")
-    elif getinterface.interface == 'eth1':
+    elif iface == 'eth1':
         print ("eth1")
-    elif getinterface.interface == 'eth2':
+    elif iface == 'eth2':
         print ("eth2")
-    elif getinterface.interface == 'eth3':
+    elif iface == 'eth3':
         print ("eth3")
     else:
         time.sleep(2)
 
 #check the current interface mode of a wireless 
  
-class getinterface :
-    interface = sp.getoutput("cat tmp/var.txt")
+
+#change class to a function and return the value of getinterface to the parent function. change everything that currently says the class and use the function. 
+
+def getinterface():
+    interface = sp.getoutput("cat scrp/tmp/var.txt")
+    if interface == 'cat: scrp/tmp/var.txt: No such file or directory':
+        interface = 'No Interface Selected'
+    else:
+        time.sleep(0.1)
+    return interface
 
 def handlenamechange():
     flag = 'mon'
-    if flag in getinterface.interface :
-        namechange = getinterface.interface+flag
+    iface = getinterface()
+    if flag in iface :
+        namechange = iface+flag
     else:
-        namechange = getinterface.interface
+        namechange = iface
     return namechange
 
 #show the interface mode
 def showinterface():
     clear()
     nc = handlenamechange()
+    if nc is None:
+        nc = 'No interface selected'
     print ("Currently Selected Interface:"+color.green+nc+color.none)
     print ("\n\n[1] Main Menu\n")
     yn = input ("Select an Option: ")
@@ -1074,7 +1087,7 @@ def showinterface():
         showinterface()
     
 #function to call script for selecting a network and setting network name to a var
-def selectnet():
+def selectint():
     os.system("sudo bash scrp/iface.sh")
     main_menu()
 
@@ -1084,10 +1097,15 @@ def getmonitormode():
     #either figure out or call a script
     os.system("echo get monitor mode")
 
+#select a target network
+def selectnet():
+    time.sleep(2)
+
 #functions for monitor mode
 
 def checkvar():
-    if getinterface.interface == '' :
+    iface = getinterface()
+    if iface == 'No Interface Selected':
         print ("Cannot continue no interface selected..")
         time.sleep(1)
         print ("Returning to Main Menu..")
@@ -1098,14 +1116,19 @@ def checkvar():
 
 def monitoron():
     checkvar()
-    os.system("sudo ifconfig "+getinterface.interface+"up")
-    os.system("sudo airmon-ng start "+getinterface.interface)
+    handlenamechange()
+    nc = handlenamechange()
+    os.system("sudo ifconfig "+nc+" up")
+    os.system("sudo airmon-ng start "+nc)
 
     #left off trying to find a way to update the interface variable in order to change interface variable from update after one of these options is chosen
 
 def monitoroff():
-    os.system("sudo ifconfig "+getinterface.interface+"up")
-    os.system("sudo airmon-ng stop "+getinterface.interface)
+    checkvar()
+    handlenamechange()
+    nc = handlenamechange()
+    os.system("sudo ifconfig "+nc+"up")
+    os.system("sudo airmon-ng stop "+nc)
 
 #functions for spoofing mac#
 
@@ -1200,6 +1223,9 @@ class exceptedformonitor:
 class exceptedfornetworkselect:
     worldlist = ['target network', 'select network', 'select a network', 'network select', 'selection for network', 'target a network', 'network target', 'wifi target', 'target wifi', 'network selection']
 
+class exceptedforintselect:
+    wordlist = ['monitor mode', 'managed mode', 'mode', 'network mode', 'wifi mode', 'wireless mode', 'monitor', 'managed', 'airmon-ng']
+
 class exceptedforip: 
     wordlist = ['ip', 'find ip', 'search ip', 'public ip', 'show ip', 'show public ip', 'showip', 'publicip']
 
@@ -1248,11 +1274,11 @@ def monitormode():
         print("invalid option")
         monitormode()
 
-def networkselection():
+def intselection():
     print ("Tools Found:")
     print ("[1] Select a Network to Target")
     print ("[2] Deselct a Network")
-    print ("[3] Show Currently Selected Network")
+    print ("[3] Show Currently Selected Interface")
     print ("\n\n\n[b] Search Again")
     print ("[x] Main Menu")
     yesno = input("Select an Option: ")
@@ -1262,15 +1288,15 @@ def networkselection():
     elif yn == 'b' :
         searchvar()
     elif yn == '1' :
-        selectnet()
+        selectint()
     elif yn == '2' :
-        deselectnet()
+        deselectint()
     elif yn == '3' :
         showinterface()
     else:
         clear()
         print("invalid option")
-        networkselection()
+        intselection()
     
 def pubip():
     print ("Tools Found:")
@@ -1327,8 +1353,8 @@ def searchtool(searchvalue):
         macspoof()
     elif sv in exceptedformonitor.worldlist :
         monitormode()
-    elif sv in exceptedfornetworkselect.worldlist :
-        networkselection()
+    elif sv in exceptedforintselect.wordlist :
+        intselection()
     elif sv in exceptedforip.wordlist :
         pubip()
     elif sv in exceptedforsysteminfo.wordlist :
@@ -1361,9 +1387,10 @@ def main_menu():
     print ("[1] WiFi Tools"+"               [8] Spoof Mac Adress")
     print ("[2] Bluetooth Tools"+"          [9] Enable Monitor Mode")  
     print ("[3] Prefabricated Scans"+"      [10] Disable Monitor Mode")
-    print ("[4] Payload Tools"+"            [11] Select a Target Network")
-    print ("[5] Hardware Tools"+"           [12] Show Public IP")
-    print ("[6] Cryptography Tools"+"       [13] Show System Info")
+    print ("[4] Payload Tools"+"            [11] Select a Wireless Interface")
+    print ("                             [12] Select a Target Network")
+    print ("[5] Hardware Tools"+"           [13] Show Public IP")
+    print ("[6] Cryptography Tools"+"       [14] Show System Info")
     print ("[7] Misc Tools"+"               [x] exit")
     print ("                             [u] check for updates")
     print ("\n")
@@ -1454,15 +1481,20 @@ def option10():
 def option11():
     print ("option 11")
     time.sleep(2)
-    selectnet()
+    selectint()
 
 def option12():
     print ("option 12")
     time.sleep(2)
-    publicip()
+    selectnet()
 
 def option13():
     print ("option 13")
+    time.sleep(2)
+    publicip()
+
+def option14():
+    print ("option 14")
     time.sleep(2)
     sysinfo()
 
@@ -1486,6 +1518,7 @@ menu_actions = {
     '11': option11, 
     '12': option12,
     '13': option13,
+    '14': option14,
     'b': back,
     'x': exit,
     'u': update,
@@ -1495,9 +1528,18 @@ menu_actions = {
 #what is done on startup
 def onstartup():
     clear()
+    os.system("rm -rf scrp/tmp/var.txt")
+    getinterface()
+    iface = getinterface()
     initialload = "loading "
     print (initialload + nvar.project)
     time.sleep(0.5)
+    if iface is None:
+        selectint()
+    elif iface == 'No Interface Selected':
+        selectint()
+    else:
+        time.sleep(0.5)
     if os.path.isfile("install.sh"):
         print ("please run the install.sh file in the "+nvar.project+"/ directory")
     else:
