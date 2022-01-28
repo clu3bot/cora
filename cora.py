@@ -1129,6 +1129,11 @@ def checkvar():
     else:
         time.sleep(0.1) 
 
+def exportint():
+    iface = getinterface()
+    os.system("print "+iface+" >tmp/int.txt")
+    time.sleep(2)
+
 def monitoron():
     checkvar()
     handlenamechange()
