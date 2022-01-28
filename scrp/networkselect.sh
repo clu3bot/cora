@@ -1,7 +1,9 @@
 #!/bin/bash/
 
+#!/bin/bash/
+
 check_iface() {
-    iface=$(airmon-ng | awk 'NR==4' | awk '{print $2}')
+    iface=$(cat tmp/int.txt)
 
         if [[ -z "${iface// }" ]]; then
             iface="eth0"
@@ -53,3 +55,5 @@ clear
 initial(){
     main
 }
+
+initial
