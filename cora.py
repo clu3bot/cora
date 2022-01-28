@@ -1098,7 +1098,22 @@ def getmonitormode():
     os.system("echo get monitor mode")
 
 #select a target network
+def getmode():
+    time.sleep(2)
+
 def selectnet():
+    clear()
+    os.system("sudo bash scrp/networkselect.sh")
+    time.sleep(2)
+
+def deselectnet():
+    clear()
+    print ("deselect net")
+    time.sleep(2)
+
+def shownet():
+    clear()
+    print("show net")
     time.sleep(2)
 
 #functions for monitor mode
@@ -1218,10 +1233,10 @@ class exceptedformacspoof:
     wordlist = ['macaddress', 'macspoof', 'spoofmac', 'mac', 'mac address', 'mac spoof', 'spoof mac', 'spoof mac address', 'macspoof', 'spoofmac', 'change mac', 'change mac address', 'change macaddress', 'mac changer', 'mac address changer', 'macchanger']
 
 class exceptedformonitor:
-    worldlist = ['monitor', 'monitor mode', 'monitormode', 'disable monitor mode', 'disable monitor', 'disablemonitor', 'disablemonitormode', 'network mode', 'managed mode', 'managed mode', 'interface', 'interface mode']
+    worldlist = ['monitor', 'monitor mode', 'monitormode', 'disable monitor mode', 'disable monitor', 'disablemonitor', 'disablemonitormode', 'network mode', 'managed mode', 'managed mode', 'interface', 'interface mode', 'wireless mode', 'wifi mode', 'airmon-ng']
 
 class exceptedfornetworkselect:
-    worldlist = ['target network', 'select network', 'select a network', 'network select', 'selection for network', 'target a network', 'network target', 'wifi target', 'target wifi', 'network selection']
+    wordlist = ['target network', 'select network', 'select a network', 'network select', 'selection for network', 'target a network', 'network target', 'wifi target', 'target wifi', 'network selection']
 
 class exceptedforintselect:
     wordlist = ['monitor mode', 'managed mode', 'mode', 'network mode', 'wifi mode', 'wireless mode', 'monitor', 'managed', 'airmon-ng']
@@ -1274,11 +1289,11 @@ def monitormode():
         print("invalid option")
         monitormode()
 
-def intselection():
+def netselection():
     print ("Tools Found:")
     print ("[1] Select a Network to Target")
     print ("[2] Deselct a Network")
-    print ("[3] Show Currently Selected Interface")
+    print ("[3] Show Currently Selected Network")
     print ("\n\n\n[b] Search Again")
     print ("[x] Main Menu")
     yesno = input("Select an Option: ")
@@ -1288,15 +1303,15 @@ def intselection():
     elif yn == 'b' :
         searchvar()
     elif yn == '1' :
-        selectint()
+        selectnet()
     elif yn == '2' :
-        deselectint()
+        deselectnet()
     elif yn == '3' :
-        showinterface()
+        shownet()
     else:
         clear()
         print("invalid option")
-        intselection()
+        netselection()
     
 def pubip():
     print ("Tools Found:")
@@ -1353,8 +1368,8 @@ def searchtool(searchvalue):
         macspoof()
     elif sv in exceptedformonitor.worldlist :
         monitormode()
-    elif sv in exceptedforintselect.wordlist :
-        intselection()
+    elif sv in exceptedfornetworkselect.wordlist :
+        netselection()
     elif sv in exceptedforip.wordlist :
         pubip()
     elif sv in exceptedforsysteminfo.wordlist :
