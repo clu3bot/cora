@@ -1,7 +1,5 @@
 #!/bin/bash/
 
-#!/bin/bash/
-
 check_iface() {
     iface=$(cat tmp/int.txt)
 
