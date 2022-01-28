@@ -15,10 +15,8 @@ check_iface() {
 
         if [ "$mode" == "Monitor" ]; then 
             Mod=Monitor 
-        elif [ "$mode" == "Managed" ];   
-            Mod=Managed 
-        else
-            Mod=Wired Connection         
+        else   
+            Mod=Managed       
         fi
 }
 
