@@ -1,4 +1,6 @@
 #!/bin/bash/
+#var
+value=1000
 
 check_iface() {
     iface=$(cat scrp/tmp/int.txt)
@@ -28,9 +30,8 @@ clear
         else
             echo -e "${LRED}This tool requires Monitor Mode${NONE}"
             read -r -p "Press Enter to return to Main Menu"
-                main_menu
+                exit
         fi
-    scan_animation &
         #failsafe for exit
         trap 'airmon-ng stop $iface > /dev/null;rm otp-01.csv 2> /dev/null' EXIT
             xterm -e airodump-ng --output-format csv -w otp "$iface" > /dev/null & sleep 10 ; kill $!
@@ -38,16 +39,17 @@ clear
         kill %1
     echo -e "\n\n${LRED}Scan Results${NONE}"
         cut -d "," -f 14 otp-01.csv | nl -n ln -w 6
-            while [ ${S} -gt "$(wc -l otp-01.csv | cut -d " " -f 1)" ] || [ ${S} -lt 1 ]; do
+            while [ ${value} -gt "$(wc -l otp-01.csv | cut -d " " -f 1)" ] || [ ${value} -lt 1 ]; do
                 echo -e "\n${LBLUE}Select a Network"
-                read -r -p "$(tput setaf 7) " S
+                read -r -p "$(tput setaf 7) " value
             done
-        nn=$(sed -n "${S}p" < otp-01.csv | cut -d "," -f 14 )
+        essid=$(sed -n "${value}p" < otp-01.csv | cut -d "," -f 14 )
         rm -rf otp-01.csv 2> /dev/null
-    echo -e "\n[${LGREEN}${nn}${NONE} ] Selected"
+    echo -e "\n[${LGREEN}${essid}${NONE} ] Selected"
+    echo $essid > scrp/tmp/essid.txt
     read -r -p "$(tput setaf 7)Press Enter to Continue.."
         clear
-        main_menu
+        exit
 }
 
 initial(){
