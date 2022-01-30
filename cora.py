@@ -1057,21 +1057,23 @@ def getinterface():
         time.sleep(0.1)
     return interface
 
-#fixing error where networkselect.sh cant grab ifac int so the solution is to export iface int from here to a file and grab the file on shell and define a nw variable there
 
-def exportint():
-    iface = getinterface()
-    os.system("echo "+iface+" > scrp/tmp/int.txt")
-    time.sleep(2)
+#fixing error where networkselect.sh cant grab ifac int so the solution is to export iface int from here to a file and grab the file on shell and define a nw variable there
 
 def handlenamechange():
     flag = 'mon'
     iface = getinterface()
     if flag in iface :
-        namechange = iface+flag
-    else:
         namechange = iface
+    else:
+        namechange = iface+flag
     return namechange
+
+
+def exportint():
+    iface = handlenamechange()
+    os.system("echo "+iface+" > scrp/tmp/int.txt")
+    time.sleep(2)
 
 #show the interface mode
 def showinterface():
@@ -1107,9 +1109,11 @@ def getmode():
 
 def selectnet():
     clear()
+
     exportint()
     os.system("sudo bash scrp/networkselect.sh")
     time.sleep(2)
+    main_menu()
 
 def deselectnet():
     clear()
@@ -1136,19 +1140,20 @@ def checkvar():
 
 def monitoron():
     checkvar()
-    handlenamechange()
-    nc = handlenamechange()
+    nc = getinterface()
     os.system("sudo ifconfig "+nc+" up")
     os.system("sudo airmon-ng start "+nc)
+    handlenamechange()
+    main_menu()
 
     #left off trying to find a way to update the interface variable in order to change interface variable from update after one of these options is chosen
 
 def monitoroff():
     checkvar()
-    handlenamechange()
     nc = handlenamechange()
     os.system("sudo ifconfig "+nc+"up")
     os.system("sudo airmon-ng stop "+nc)
+    main_menu()
 
 #functions for spoofing mac#
 
