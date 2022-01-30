@@ -53,3 +53,5 @@ clear
 initial(){
     main
 }
+
+initial
