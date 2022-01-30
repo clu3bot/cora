@@ -1,7 +1,7 @@
 #!/bin/bash/
 
 check_iface() {
-    iface=$(cat tmp/int.txt)
+    iface=$(cat scrp/tmp/int.txt)
 
         if [[ -z "${iface// }" ]]; then
             iface="eth0"
@@ -53,5 +53,3 @@ clear
 initial(){
     main
 }
-
-initial
