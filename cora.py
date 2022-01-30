@@ -1047,14 +1047,6 @@ def checkether():
     else:
         time.sleep(2)
  
-
-#fixing error where networkselect.sh cant grab ifac int so the solution is to export iface int from here to a file and grab the file on shell and define a nw variable there
-
-def exportint():
-    iface = getinterface()
-    os.system("echo "+iface+" > scrp/tmp/int.txt")
-    time.sleep(2)
-
 #change class to a function and return the value of getinterface to the parent function. change everything that currently says the class and use the function. 
 
 def getinterface():
@@ -1064,6 +1056,13 @@ def getinterface():
     else:
         time.sleep(0.1)
     return interface
+
+#fixing error where networkselect.sh cant grab ifac int so the solution is to export iface int from here to a file and grab the file on shell and define a nw variable there
+
+def exportint():
+    iface = getinterface()
+    os.system("echo "+iface+" > scrp/tmp/int.txt")
+    time.sleep(2)
 
 def handlenamechange():
     flag = 'mon'
@@ -1399,7 +1398,7 @@ menu_actions  = {}
 def main_menu():
 
     handleexit()
-    var = sp.getoutput("cat tmp/var.txt")
+    var = sp.getoutput("cat scrp/tmp/var.txt")
     clear()
     print ("Cora")
     print ("By "+nvar.user+", "+nvar.date)
