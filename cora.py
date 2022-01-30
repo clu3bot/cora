@@ -1046,9 +1046,14 @@ def checkether():
         print ("eth3")
     else:
         time.sleep(2)
-
-#check the current interface mode of a wireless 
  
+
+#fixing error where networkselect.sh cant grab ifac int so the solution is to export iface int from here to a file and grab the file on shell and define a nw variable there
+
+def exportint():
+    iface = getinterface()
+    os.system("print "+iface+" > tmp/int.txt")
+    time.sleep(2)
 
 #change class to a function and return the value of getinterface to the parent function. change everything that currently says the class and use the function. 
 
@@ -1103,6 +1108,7 @@ def getmode():
 
 def selectnet():
     clear()
+    exportint()
     os.system("sudo bash scrp/networkselect.sh")
     time.sleep(2)
 
@@ -1128,11 +1134,6 @@ def checkvar():
         main_menu()
     else:
         time.sleep(0.1) 
-
-def exportint():
-    iface = getinterface()
-    os.system("print "+iface+" >tmp/int.txt")
-    time.sleep(2)
 
 def monitoron():
     checkvar()
