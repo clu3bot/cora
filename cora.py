@@ -1052,7 +1052,7 @@ def checkether():
 
 def exportint():
     iface = getinterface()
-    os.system("print "+iface+" > scrp/tmp/int.txt")
+    os.system("echo "+iface+" > scrp/tmp/int.txt")
     time.sleep(2)
 
 #change class to a function and return the value of getinterface to the parent function. change everything that currently says the class and use the function. 
