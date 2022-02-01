@@ -22,6 +22,10 @@ check_iface() {
         fi
 }
 
+command(){
+    airodump-ng --output-format csv -w otp "$iface" > /dev/null & sleep 10 ; kill $! 
+}
+
 main(){
 clear
     check_iface
@@ -34,7 +38,7 @@ clear
         fi
         #failsafe for exit
         trap 'airmon-ng stop $iface > /dev/null;rm otp-01.csv 2> /dev/null' EXIT
-            airodump-ng --output-format csv -w otp "$iface" > /dev/null & sleep 10 ; kill $!
+            command
             sed -i '1d' otp-01.csv
         kill %1
     echo -e "\n\n${LRED}Scan Results${NONE}"
