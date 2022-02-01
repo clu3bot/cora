@@ -1,0 +1,153 @@
+import subprocess as sp
+import os
+import time
+
+#colar vars
+class color:
+    lightblue='\033[1;34m' #light blue
+    lightred='\033[1;31m' #light red
+    lightgreen='\033[1;32m' #lightgreen
+    red='\033[0;31m' #red
+    yellow='\033[1;33m' #yellow
+    none='\033[0m' #no color
+    purple='\033[1;35m' #purple
+    cyan='\033[0;36m' #cyan
+    green='\033[0;32m' #green
+
+#dependencies
+class dependencies:
+    dependencie1 = 'mdk3'
+    dependencie2 = 'aircrack-ng'
+    dependencie3 = 'xterm'
+    dependencie4 = 'macchanger'
+
+#general
+prompt1 = 'Install Missing Dependencies? y/n'
+prompt2 = 'All Dependencies installed.'
+
+def clear():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+def check_mdk3():
+    
+    check_d1 = sp.getoutput("bash etc/dpkg-check/dpkg-check-mdk3.sh")
+
+    if check_d1 == 0: 
+        mdk3 = 'null'
+    else:
+        mdk3 = 'installed'
+
+    return mdk3
+
+def check_aircrack():
+    
+    check_d2 = sp.getoutput("bash etc/dpkg-check/dpkg-check-aircrack-ng.sh")    
+    
+    if check_d2 == 0:
+        aircrack = 'null'
+    else:
+        aircrack = 'installed'
+    
+    return aircrack
+
+def check_xterm():
+    check_d3 = sp.getoutput("bash etc/dpkg-check/dpkg-check-xterm.sh")
+    
+    if check_d3 == 0:
+        xterm = 'null'
+    else:
+        xterm = 'installed'
+    
+    return xterm
+
+def check_macchanger():
+    
+    check_d4 = sp.getoutput("bash etc/dpkg-check/dpkg-check-macchanger.sh")
+
+    if check_d4 == 0:
+        macchanger = 'null'
+    else:
+        macchanger = 'installed'
+
+    return macchanger
+
+def check_all():
+
+    mdk3 = check_mdk3()
+    aircrack = check_aircrack()
+    xterm = check_xterm()
+    macchanger = check_macchanger()
+
+    #display
+
+    clear()
+
+    if mdk3 == 'null':
+        print (color.red+dependencies.dependencie1+" (Not Installed)"+color.none)
+    else:
+        print (color.green+dependencies.dependencie1+" (Intsalled)"+color.none)
+
+    if aircrack == 'null':
+        print (color.red+dependencies.dependencie2+" (Not Installed)"+color.none)
+    else:
+        print (color.green+dependencies.dependencie2+" (Intsalled)"+color.none)
+
+    if xterm == 'null':
+        print (color.red+dependencies.dependencie3+" (Not Intsalled)"+color.none)
+    else:
+        print (color.green+dependencies.dependencie3+" (Intsalled)"+color.none)
+    
+    if macchanger == 'null':
+        print (color.red+dependencies.dependencie4+" (Not Intsalled)"+color.none)
+    else:
+        print (color.green+dependencies.dependencie4+" (Intsalled)"+color.none)
+
+def download():
+    time.sleep(1)
+
+def ask():
+    a = input(prompt1)
+    b = a.lower()
+    if b == 'y':
+        download()
+    elif b == 'n':
+        print (color.red+"Warning Cora will loose function if these packages are not installed."+color.none)
+        input ("Press any key to continue..")
+        time.sleep(3)
+    else:
+        print (color.red+"Invalid Option"+color.none)
+
+def prompt():
+
+    mdk3 = check_mdk3()
+    aircrack = check_aircrack()
+    xterm = check_xterm()
+    macchanger = check_macchanger()
+
+    if mdk3 == 'null':
+        check = 0
+    elif aircrack == 'null':
+        check = 0
+    elif xterm == 'null':
+        check = 0
+    elif macchanger == 'null':
+        check = 0
+    else:
+        check = 1
+
+    if check == 0:
+        ask()
+    elif check == 1:
+        print (prompt2)
+    else:
+        print (color.red+"Error"+color.none)
+
+def initialload():
+    check_mdk3()
+    check_aircrack()
+    check_xterm()
+    check_macchanger()
+    check_all()
+    prompt()
+
+initialload()
