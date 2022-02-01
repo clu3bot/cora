@@ -1548,11 +1548,21 @@ menu_actions = {
     'x': exit,
     'u': update,
 }
+
 ###########################################################################################################
+
+def check_install():
+    check = sp.getoutput("cat etc/done_flag.txt")
+    if check == 'done':
+        time.sleep(1)
+    else:
+        print(color.red+"Run install.py")
+        exit()
 
 #what is done on startup
 def onstartup():
     clear()
+    check_install()
     os.system("rm -rf scrp/tmp/var.txt")
     getinterface()
     iface = getinterface()
