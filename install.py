@@ -22,7 +22,7 @@ class dependencies:
     dependencie4 = 'macchanger'
 
 #general
-prompt1 = 'Install Missing Dependencies? y/n'
+prompt1 = 'Install Missing Dependencies? y/n\n'
 prompt2 = 'All Dependencies installed.'
 
 def clear():
@@ -32,7 +32,7 @@ def check_mdk3():
     
     check_d1 = sp.getoutput("bash etc/dpkg-check/dpkg-check-mdk3.sh")
 
-    if check_d1 == 0: 
+    if check_d1 == '0': 
         mdk3 = 'null'
     else:
         mdk3 = 'installed'
@@ -43,7 +43,7 @@ def check_aircrack():
     
     check_d2 = sp.getoutput("bash etc/dpkg-check/dpkg-check-aircrack-ng.sh")    
     
-    if check_d2 == 0:
+    if check_d2 == '0':
         aircrack = 'null'
     else:
         aircrack = 'installed'
@@ -53,7 +53,7 @@ def check_aircrack():
 def check_xterm():
     check_d3 = sp.getoutput("bash etc/dpkg-check/dpkg-check-xterm.sh")
     
-    if check_d3 == 0:
+    if check_d3 == '0':
         xterm = 'null'
     else:
         xterm = 'installed'
@@ -64,7 +64,7 @@ def check_macchanger():
     
     check_d4 = sp.getoutput("bash etc/dpkg-check/dpkg-check-macchanger.sh")
 
-    if check_d4 == 0:
+    if check_d4 == '0':
         macchanger = 'null'
     else:
         macchanger = 'installed'
@@ -131,7 +131,7 @@ def download():
     
     if mdk3 == 'null':
         if packman == 'apt':
-            os.system("sudo apt-get instasll mdk3")
+            os.system("sudo apt-get install mdk3")
         elif packman == 'apk':
             os.system("sudo apk add mdk3")
         elif packman == 'dnf':
@@ -221,6 +221,10 @@ def prompt():
     else:
         print (color.red+"Error"+color.none)
 
+def export_done_flag():
+    done_flag = 'done'
+    os.system("echo "+done_flag+" > etc/done_flag.txt")
+
 def initialload():
     check_mdk3()
     check_aircrack()
@@ -228,5 +232,6 @@ def initialload():
     check_macchanger()
     check_all()
     prompt()
+    export_done_flag()
 
 initialload()
