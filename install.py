@@ -103,7 +103,86 @@ def check_all():
         print (color.green+dependencies.dependencie4+" (Intsalled)"+color.none)
 
 def download():
-    time.sleep(1)
+
+    mdk3 = check_mdk3()
+    aircrack = check_aircrack()
+    xterm = check_xterm()
+    macchanger = check_macchanger()
+
+    download_check_apt = sp.getoutput("command -v apt-get")
+    download_check_apk = sp.getoutput("command -v apk")
+    download_check_dnf = sp.getoutput("command -v dnf")
+    download_check_zypper = sp.getoutput("command -v zypper")
+    download_check_pacman = sp.getoutput("command -v pacman")
+
+    if download_check_apt != ' ':
+        packman = 'apt'
+    elif download_check_apk != ' ':
+        packman = 'apk'
+    elif download_check_dnf != ' ':
+        packman = 'dnf'
+    elif download_check_zypper != ' ':
+        packman = 'zypper'
+    elif download_check_pacman != ' ':
+        packman = 'pacman'
+    else:
+        print ("Could not locate a package manager.")
+        exit()
+    
+    if mdk3 == 'null':
+        if packman == 'apt':
+            os.system("sudo apt-get instasll mdk3")
+        elif packman == 'apk':
+            os.system("sudo apk add mdk3")
+        elif packman == 'dnf':
+            os.system("sudo dnf install mdk3")
+        elif packman == 'zypper':
+            os.system("sudo zypper install mdk3")
+        elif packman == 'pacman':
+            os.system("sudo pacman -S mdk3")
+        else:
+            print("Could not locate a package..")
+    elif aircrack == 'null':
+        if packman == 'apt':
+            os.system("sudo apt-get install aircrack-ng")
+        elif packman == 'apk':
+            os.system("sudo apk add aircrack-ng")
+        elif packman == 'dnf':
+            os.system("sudo dnf install aircrack-ng")
+        elif packman == 'zypper':
+            os.system("sudo zypper install aircrack-ng")
+        elif packman == 'pacman':
+            os.system("sudo pacman -S aircrack-ng")
+        else:
+            print("Could not locate a package..")
+    elif xterm == 'null':
+        if packman == 'apt':
+            os.system("sudo apt-get install xterm")
+        elif packman == 'apk':
+            os.system("sudo apk add xterm")
+        elif packman == 'dnf':
+            os.system("sudo dnf install xterm")
+        elif packman == 'zypper':
+            os.system("sudo zypper install xterm")
+        elif packman == 'pacman':
+            os.system("sudo pacman -S xterm")
+        else:
+            print("Could not locate a package..")
+    elif macchanger == 'null':
+        if packman == 'apt':
+            os.system("sudo apt-get install macchanger")
+        elif packman == 'apk':
+            os.system("sudo apk add macchanger")
+        elif packman == 'dnf':
+            os.system("sudo dnf install macchanger")
+        elif packman == 'zypper':
+            os.system("sudo zypper install macchanger")
+        elif packman == 'pacman':
+            os.system("sudo pacman -S macchanger")
+        else:
+            print("Could not locate a package..")
+    else:
+        print ("Could not locate a package.")
 
 def ask():
     a = input(prompt1)
