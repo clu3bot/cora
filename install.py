@@ -1,6 +1,7 @@
 import subprocess as sp
 import os
 import time
+import platform
 
 #colar vars
 class color:
@@ -13,6 +14,25 @@ class color:
     purple='\033[1;35m' #purple
     cyan='\033[0;36m' #cyan
     green='\033[0;32m' #green
+
+def permissions():  #checks for root permissions
+    clear()
+    if not os.environ.get("SUDO_UID") and os.geteuid() != 0:
+        print(color.lightred + "You need to run this script with sudo or as root.")
+        time.sleep(0.3)
+        quit()
+
+permissions()
+
+
+def getos():
+    osys=platform.system()
+    if osys != "Linux":
+        print(color.lightred + "This program only runs on Linux operating systems.")
+        time.sleep(2)
+        quit()
+
+getos()
 
 #dependencies
 class dependencies:
