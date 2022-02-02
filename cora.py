@@ -1449,77 +1449,62 @@ def exit():
 
 #defines the options for the main menu
 def option0():
-    print ("option 0")
     time.sleep(2)
     searchvar()
 
 def option1():
-    print ("option 1")
     time.sleep(2)    
     wifi_menu()
 
 def option2():
-    print ("option 2")
     time.sleep(2)    
     bluetooth_menu()
 
 def option3():
-    print ("option 3")
     time.sleep(2)
     scan_menu()
 
 def option4():
-    print ("option 4")
     time.sleep(2)
     payload_menu()
 
 def option5():
-    print ("option 5")
     time.sleep(2)    
     hardware_menu()
 
 def option6():
-    print ("option 6")
     time.sleep(2)    
     crypto_menu()
 
 def option7():
-    print ("option 7")
     time.sleep(2)
     misc_menu()
 
 def option8():
-    print ("option 8")
     time.sleep(2)
     spoof_menu()
 
 def option9():
-    print ("option 9")
     time.sleep(2)
     monitoron()
 
 def option10():
-    print ("option 10")
     time.sleep(2)
     monitoroff()
 
 def option11():
-    print ("option 11")
     time.sleep(2)
     selectint()
 
 def option12():
-    print ("option 12")
     time.sleep(2)
     selectnet()
 
 def option13():
-    print ("option 13")
     time.sleep(2)
     publicip()
 
 def option14():
-    print ("option 14")
     time.sleep(2)
     sysinfo()
 
