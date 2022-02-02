@@ -39,7 +39,6 @@
 ##################################################################################
 
 
-from asyncio import subprocess
 import sys
 import random as rd
 import os
@@ -48,8 +47,7 @@ import threading as thd
 import subprocess as sp
 import signal
 import os.path
-from unicodedata import name
-from webbrowser import get
+import platform
 
 
 #vars for script
@@ -84,6 +82,20 @@ def handleexit():
     signal.signal(signal.SIGINT, signal_handler)
 
 handleexit()
+
+def permissions():  #checks for root permissions
+    clear()
+    if not os.environ.get("SUDO_UID") and os.geteuid() != 0:
+        print(color.lightred + "You need to run this script with sudo or as root.")
+        time.sleep(0.3)
+        quit()
+
+def getos():
+    osys=platform.system()
+    if osys != "Linux":
+        print(color.lightred + "This program only runs on Linux operating systems.")
+        time.sleep(2)
+        quit()
 
 
 #################################################hardware menu###################################################
