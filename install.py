@@ -15,6 +15,9 @@ class color:
     cyan='\033[0;36m' #cyan
     green='\033[0;32m' #green
 
+def clear():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
 def permissions():  #checks for root permissions
     clear()
     if not os.environ.get("SUDO_UID") and os.geteuid() != 0:
