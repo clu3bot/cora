@@ -1,9 +1,7 @@
+import os 
 import subprocess as sp
-import os
 import time
 import platform
-from os.path import exists
-
 
 #colar vars
 class color:
@@ -17,103 +15,80 @@ class color:
     cyan='\033[0;36m' #cyan
     green='\033[0;32m' #green
 
+def clear(): #clear
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+def downloads(): #checks if downloads has been run.
+    check = sp.getoutput("cat etc/done_flag.txt")
+
+    if check == 'done':
+        flag_downloads = 1
+    else:
+        flag_downloads = 0
+    
+    return flag_downloads
+    
+
 def permissions():  #checks for root permissions
     if not os.environ.get("SUDO_UID") and os.geteuid() != 0:
-        print(color.lightred + "You need to run this script with sudo or as root.")
-        time.sleep(0.3)
-        quit()
+        flag_permissions = 0
+    else:
+        flag_permissions = 1
 
-permissions()
+    return flag_permissions
 
-def getos():
+def getos(): # checks if system is linux
     osys=platform.system()
     if osys != "Linux":
-        print(color.lightred + "This program only runs on Linux operating systems.")
-        time.sleep(2)
-        quit()
-
-getos()
-
-
-def check_file():
-    file = exists("tmp/flag.txt")
-
-    if file == 'True':
-        os.system("rm -rf tmp/flag.txt")
+        flag_os = 0
     else:
-        time.sleep(0.5)
+        flag_os = 1
 
-check_file()
+    return flag_os
 
-#dependencies
-class dependencies:
-    dependencie1 = 'mdk3'
-    dependencie2 = 'aircrack-ng'
-    dependencie3 = 'xterm'
-    dependencie4 = 'macchanger'
+def dependencies():
+    os.system("python3 bin/ess/dependencies.py")
+    check = sp.getoutput("cat bin/ess/tmp/flag.txt")
 
-def check_mdk3():
-    
-    check_d1 = sp.getoutput("bash etc/dpkg-check/dpkg-check-mdk3.sh")
-
-    if check_d1 == '0': 
-        mdk3 = 'null'
+    if check == 'null':
+        flag_dependencies = 0
     else:
-        mdk3 = 'inst'
+        flag_dependencies = 1
 
-    return mdk3
+    return flag_dependencies
 
-def check_aircrack():
-    
-    check_d2 = sp.getoutput("bash etc/dpkg-check/dpkg-check-aircrack-ng.sh")    
-    
-    if check_d2 == '0':
-        aircrack = 'null'
-    else:
-        aircrack = 'inst'
-    
-    return aircrack
+def check_all():
+    flag_1 = downloads()
+    flag_2 = permissions()
+    flag_3 = getos()
+    flag_4 = dependencies()
 
-def check_xterm():
-    check_d3 = sp.getoutput("bash etc/dpkg-check/dpkg-check-xterm.sh")
-    
-    if check_d3 == '0':
-        xterm = 'null'
-    else:
-        xterm = 'inst'
-    
-    return xterm
+    if flag_1 == 0:
+        print (color.red+"File: install.py has not been run.")
+    elif flag_2 == 0:
+        print (color.red+"Program requires sudo permission.")
+    elif flag_3 == 0:
+        print (color.red+"Os is not Linux. This program only runs on linux")
+    elif flag_4 == 0:
+        print (color.red+"Missing Dependencies. Run install.py in cora/ directory.")
 
-def check_macchanger():
-    
-    check_d4 = sp.getoutput("bash etc/dpkg-check/dpkg-check-macchanger.sh")
 
-    if check_d4 == '0':
-        macchanger = 'null'
-    else:
-        macchanger = 'inst'
+def display():
+    clear()
+    print("Diagnosing problems..\n")
+    permissions()
+    print("25%")
+    downloads()
+    print("50%")
+    getos()
+    print("75%")
+    dependencies()
+    check_all()
+    print ("100%")
+    clear()
+    print("No problems detected\n")
+    input("Press anything to close..")
+    exit()
+display()
 
-    return macchanger
-
-def export():
-    mdk3 = check_mdk3()
-    aircrack = check_aircrack()
-    xterm = check_xterm()
-    macchanger = check_macchanger()
-
-    if mdk3 == 'null':
-        flag = "null"
-    elif aircrack == 'null':
-        flag = "null"
-    elif xterm == 'null':
-        flag = "null"
-    elif macchanger == "null":
-        flag = "null"
-    else:
-        time.sleep(1)
-    
-    if flag == 'null':
-        os.system("echo "+flag+" > tmp/flag.txt")
-    else:
-        check_file()
 
