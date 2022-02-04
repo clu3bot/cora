@@ -1,3 +1,8 @@
+import os
+import time
+
+def clear():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 def initial():
 
@@ -22,5 +27,28 @@ def initial():
     new_output = output_str.lower()
 
     print ("Output: "+new_output)
+    return new_output
 
-initial()
+def ask():
+
+    rotstr = initial()
+    userchoice = input ("Save this string to a file? y/n")
+
+    userchoicelower = userchoice.lower()
+    if userchoicelower == 'y':
+        os.system("echo "+rotstr+" > backupstrs/rotstr.txt")
+        print ("File saved to cora/etc/crypto/backupstrs/")
+    elif userchoicelower == 'n':
+        time.sleep(1)
+    else:
+        print ("Invalid Option..")
+        time.sleep(2)
+        ask()
+
+ask()
+
+def last():
+    clear()
+    input ("Press any key to return to Crypto Menu..")
+
+last()
