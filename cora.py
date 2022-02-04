@@ -532,14 +532,13 @@ def crypto_menu():
     print ("Cryptography Tool Options")
     print ("By "+nvar.user+", "+nvar.date)
     print ("Detailed documentation on the cora wiki found on https://github.com/chimerafoundation/befw\n\n")   ##fix 
-    print ("[0] Search for a tool.\n")
-    print ("[1] WiFi Tools"+"               [8] Spoof Mac Adress")
-    print ("[2] Bluetooth Tools"+"          [9] Enable Monitor Mode")  
-    print ("[3] Prefabricated Scans"+"      [10] Disable Monitor Mode")
-    print ("[4] Payload Tools"+"            [11] Select a Target Network")
-    print ("[5] Hardware Tools"+"           [12] Show Public IP")
-    print ("[6] Cryptography Tools"+"       [b] back")
-    print ("[7] Misc Tools"+"               [x] exit")
+    print ("[1] Base64 Encode/Decode"+"               [8] ")
+    print ("[2] Rot Cypher Encode/Decode"+"          [9] ")  
+    print ("[3] "+"      [10] ")
+    print ("[4] "+"            [11] ")
+    print ("[5] "+"           [12] ")
+    print ("[6] "+"       [b] back")
+    print ("[7] "+"               [x] exit")
     print ("\n")
     choice = input("\n>>  ")
     crypto_exec_menu(choice)
@@ -570,19 +569,13 @@ def exit():
     sys.exit()
 
 #defines the options for the main menu
-def cryptooption0():
-    print ("option 0")
-    time.sleep(2)
-    crypto_menu()
 
 def cryptooption1():
-    print ("wifi option 1")
-    time.sleep(2)    
+    os.system("python3 etc/crypto/base-64.py")
     crypto_menu()
 
 def cryptooption2():
-    print ("option 2")
-    time.sleep(2)    
+    os.system("python3 etc/crypto/rot-cypher.py")
     crypto_menu()
 
 def cryptooption3():
@@ -643,7 +636,6 @@ def cryptooption13():
 #binds the options to numbers
 crypto_menu_actions = {
     'main_menu': crypto_menu,
-    '0': cryptooption0,
     '1': cryptooption1,    
     '2': cryptooption2,
     '3': cryptooption3,
@@ -1250,7 +1242,7 @@ spoofmenu_actions = {
 
 ####################################################search funtion#########################################################
 
-#tool keyword flags
+#tool keyword flag data
 
 class exceptedformacspoof:
     wordlist = ['macaddress', 'macspoof', 'spoofmac', 'mac', 'mac address', 'mac spoof', 'spoof mac', 'spoof mac address', 'macspoof', 'spoofmac', 'change mac', 'change mac address', 'change macaddress', 'mac changer', 'mac address changer', 'macchanger']
@@ -1269,6 +1261,17 @@ class exceptedforip:
 
 class exceptedforsysteminfo: 
     wordlist = ['system', 'system info', 'info system', 'sys', 'sys info', 'sysinfo', 'systeminfo', 'infosystem', 'show sys info', 'show system info', 'system information', 'specs', 'spec', 'system specs']
+
+class exceptedforbase64:
+    wordlist = ['base 64', 'base64', 'base64 encode', 'base', 'base 64 encode', 'base 64 decode', 'base64 decode', 'base64 encryption', 'encrypt base64']
+
+class exceptedforrot:
+    wordlist = ['rot cypher', 'rot', 'rot encryption', 'rot-13', 'rot-17', 'rotcypher', 'rot 13', 'rot-17', 'rot-13 cypher', 'rot 13 cypher']
+
+class exceptedforcypher:
+    wordlist = ['cypher', 'cypto', 'cryptography', 'encryption', 'cyphers', 'encryptions', 'encode', 'decode']
+
+#options
 
 def macspoof():
     print ("Tools Found:")
@@ -1372,6 +1375,60 @@ def systeminfo():
         print("invalid option")
         systeminfo()
 
+def base64encode():
+    print ("Tools Found:")
+    print ("[1] Base 64 Encode/Decode")
+    print ("\n\n\n[b] Search Again")
+    print ("[x] Main Menu")
+    yesno = input("Select an Option: ")
+    yn = yesno.lower()
+    if yn == 'x':
+        main_menu()
+    elif yn == 'b' :
+        searchvar()
+    elif yn == '1' :
+        cryptooption1()
+    else:
+        clear()
+        print("invalid option")
+        systeminfo()
+
+def rotcypher():
+    print ("Tools Found:")
+    print ("[1] Rot Cypher Encode/Decode")
+    print ("\n\n\n[b] Search Again")
+    print ("[x] Main Menu")
+    yesno = input("Select an Option: ")
+    yn = yesno.lower()
+    if yn == 'x':
+        main_menu()
+    elif yn == 'b' :
+        searchvar()
+    elif yn == '1' :
+        cryptooption2()
+    else:
+        clear()
+        print("invalid option")
+        systeminfo()
+
+def cyphermenu():
+    print ("Tools Found:")
+    print ("[1] Cryptography Menu")
+    print ("\n\n\n[b] Search Again")
+    print ("[x] Main Menu")
+    yesno = input("Select an Option: ")
+    yn = yesno.lower()
+    if yn == 'x':
+        main_menu()
+    elif yn == 'b' :
+        searchvar()
+    elif yn == '1' :
+        crypto_menu()
+    else:
+        clear()
+        print("invalid option")
+        systeminfo()
+
 #instand responses
 
 def instantresponseip():
@@ -1397,6 +1454,12 @@ def searchtool(searchvalue):
         pubip()
     elif sv in exceptedforsysteminfo.wordlist :
         systeminfo()
+    elif sv in exceptedforbase64.wordlist :
+        base64encode()
+    elif sv in exceptedforcypher.wordlist :
+        cyphermenu()
+    elif sv in exceptedforrot.wordlist :
+        rotcypher()
     else:
         print("The tool you have searched for "+color.red+sv+color.none+" was unable to be found. Try being more specific (Common names of tools.)")
         time.sleep(4.5)
