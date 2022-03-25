@@ -90,5 +90,3 @@ def display():
     input("Press anything to close..")
     exit()
 display()
-
-
