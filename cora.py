@@ -1503,7 +1503,8 @@ def option14():
     sysinfo()
 
 def update():
-    print("updates")
+    os.system("sudo bash updates.sh")
+    main_menu()
 
 #binds the options to numbers
 menu_actions = {
