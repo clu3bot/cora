@@ -39,6 +39,7 @@
 ##################################################################################
 
 
+from select import select
 import sys
 import random as rd
 import os
@@ -111,10 +112,9 @@ def hardware_menu():
     print ("Hardware Tool Options")
     print ("By "+nvar.user+", "+nvar.date)
     print ("Detailed documentation on the cora wiki found on https://github.com/chimerafoundation/befw\n\n")   ##fix 
-    print ("[1] Flash Bin Files to Development Boards"+"   [5] Spoof Mac Adress")
-    print ("[2] Burn ISO File to Live USB"+"               [6] Enable Monitor Mode")  
-    print ("[3] "+"                                        [7] Disable Monitor Mode")
-    print ("[4] Payload Tools"+"                           [8] Select a Target Network")
+    print ("[1] Flash Bin Files to Development Boards")
+    print ("[2] Burn ISO File to Live USB")  
+    print ("[3] View Hardware Info\n")
     print ("[b] back")
     print ("[x] exit")
     print ("\n")
@@ -167,56 +167,6 @@ def hardwareoption3():
     time.sleep(2)
     hardware_menu()
 
-def hardwareoption4():
-    print ("option 4")
-    time.sleep(2)
-    hardware_menu()
-
-def hardwareoption5():
-    print ("option 5")
-    time.sleep(2)    
-    hardware_menu()
-
-def hardwareoption6():
-    print ("option 6")
-    time.sleep(2)    
-    hardware_menu()
-
-def hardwareoption7():
-    print ("option 7")
-    time.sleep(2)
-    hardware_menu()
-
-def hardwareoption8():
-    print ("option 8")
-    time.sleep(2)
-    hardware_menu()
-
-def hardwareoption9():
-    print ("option 9")
-    time.sleep(2)
-    hardware_menu()
-
-def hardwareoption10():
-    print ("option 10")
-    time.sleep(2)
-    hardware_menu()
-
-def hardwareoption11():
-    print ("option 11")
-    time.sleep(2)
-    hardware_menu()
-
-def hardwareoption12():
-    print ("option 12")
-    time.sleep(2)
-    hardware_menu()
-
-def hardwareoption13():
-    print ("option 13")
-    time.sleep(2)
-    hardware_menu()
-
 #binds the options to numbers
 hardware_menu_actions = {
     'main_menu': hardware_menu,
@@ -224,16 +174,6 @@ hardware_menu_actions = {
     '1': hardwareoption1,    
     '2': hardwareoption2,
     '3': hardwareoption3,
-    '4': hardwareoption4,
-    '5': hardwareoption5,
-    '6': hardwareoption6,
-    '7': hardwareoption7,
-    '8': hardwareoption8, 
-    '9': hardwareoption9,
-    '10': hardwareoption10,
-    '11': hardwareoption11, 
-    '12': hardwareoption12,
-    '13': hardwareoption13,
     'b': back,
     'x': exit,
 }
@@ -396,7 +336,7 @@ def misc_menu():
     print ("[2] Bluetooth Tools"+"          [9] Enable Monitor Mode")  
     print ("[3] Prefabricated Scans"+"      [10] Disable Monitor Mode")
     print ("[4] Payload Tools"+"            [11] Select a Target Network")
-    print ("[5] Hardware Tools"+"           [12] Show Public IP")
+    print ("[5] Hardware Tools"+"           [12] Show Public IP") 
     print ("[6] Cryptography Tools"+"       [b] back")
     print ("[7] Misc Tools"+"               [x] exit")
     print ("\n")
@@ -534,11 +474,8 @@ def crypto_menu():
     print ("Detailed documentation on the cora wiki found on https://github.com/chimerafoundation/befw\n\n")   ##fix 
     print ("[1] Base64 Encode/Decode"+"               [8] ")
     print ("[2] Rot Cypher Encode/Decode"+"          [9] ")  
-    print ("[3] "+"      [10] ")
-    print ("[4] "+"            [11] ")
-    print ("[5] "+"           [12] ")
-    print ("[6] "+"       [b] back")
-    print ("[7] "+"               [x] exit")
+    print ("[b] back")
+    print ("[x] exit")
     print ("\n")
     choice = input("\n>>  ")
     crypto_exec_menu(choice)
@@ -665,14 +602,13 @@ def scan_menu():
     print ("Prefabricated Scan Options")
     print ("By "+nvar.user+", "+nvar.date)
     print ("Detailed documentation on the cora wiki found on https://github.com/chimerafoundation/befw\n\n")   ##fix 
-    print ("[0] Search for a tool.\n")
-    print ("[1] WiFi Tools"+"               [8] Spoof Mac Adress")
-    print ("[2] Bluetooth Tools"+"          [9] Enable Monitor Mode")  
-    print ("[3] Prefabricated Scans"+"      [10] Disable Monitor Mode")
-    print ("[4] Payload Tools"+"            [11] Select a Target Network")
-    print ("[5] Hardware Tools"+"           [12] Show Public IP")
-    print ("[6] Cryptography Tools"+"       [b] back")
-    print ("[7] Misc Tools"+"               [x] exit")
+    print ("[1] ARP Scan")
+    print ("[2] NMAP Scan")  
+    print ("[3] Verbose NMAP Scan")
+    print ("[4] Bluetooth AP Scan")
+    print ("[5] Wireless AP Dump")
+    print ("[6] Gobuster Scan"+"       [b] back")
+    print ("                           [x] exit")
     print ("\n")
     choice = input("\n>>  ")
     scan_exec_menu(choice)
@@ -738,40 +674,6 @@ def scanoption6():
     time.sleep(2)    
     scan_menu()
 
-def scanoption7():
-    print ("option 7")
-    time.sleep(2)
-    scan_menu()
-
-def scanoption8():
-    print ("option 8")
-    time.sleep(2)
-    scan_menu()
-
-def scanoption9():
-    print ("option 9")
-    time.sleep(2)
-    scan_menu()
-
-def scanoption10():
-    print ("option 10")
-    time.sleep(2)
-    scan_menu()
-
-def scanoption11():
-    print ("option 11")
-    time.sleep(2)
-    scan_menu()
-
-def scanoption12():
-    print ("option 12")
-    time.sleep(2)
-    scan_menu()
-
-def scanoption13():
-    print ("option 13")
-    time.sleep(2)
-    scan_menu()
 
 #binds the options to numbers
 scan_menu_actions = {
@@ -783,13 +685,6 @@ scan_menu_actions = {
     '4': scanoption4,
     '5': scanoption5,
     '6': scanoption6,
-    '7': scanoption7,
-    '8': scanoption8, 
-    '9': scanoption9,
-    '10': scanoption10,
-    '11': scanoption11, 
-    '12': scanoption12,
-    '13': scanoption13,
     'b': back,
     'x': exit,
 }
@@ -806,8 +701,8 @@ def bluetooth_menu():
     print ("Bluetooth Tool Options")
     print ("By "+nvar.user+", "+nvar.date)
     print ("Detailed documentation on the cora wiki found on https://github.com/chimerafoundation/befw\n\n")   ##fix 
-    print ("[1] WiFi Tools"+"               [3] Spoof Mac Adress")
-    print ("[2] Bluetooth Tools"+"          [4] Enable Monitor Mode")  
+    print ("[1] Bluetooth Dos"+"               [3] View Bluetooth Mac")
+    print ("[2] Spoof Bluetooth Mac")  
     print ("[b] back")
     print ("[x] exit")
     print ("\n")
@@ -856,11 +751,6 @@ def btoption3():
     time.sleep(2)
     bluetooth_menu()
 
-def btoption4():
-    print ("option 4")
-    time.sleep(2)
-    bluetooth_menu()
-
 
 #binds the options to numbers
 bluetooth_menu_actions = {
@@ -868,7 +758,6 @@ bluetooth_menu_actions = {
     '1': btoption1,    
     '2': btoption2,
     '3': btoption3,
-    '4': btoption4,
     'b': back,
     'x': exit,
 }
@@ -886,13 +775,13 @@ def wifi_menu():
     print ("By "+nvar.user+", "+nvar.date)
     print ("Detailed documentation on the cora wiki found on https://github.com/chimerafoundation/befw\n\n")   ##fix 
     print ("[0] Search for a tool.\n")
-    print ("[1] WiFi Tools"+"               [8] Spoof Mac Adress")
-    print ("[2] Bluetooth Tools"+"          [9] Enable Monitor Mode")  
-    print ("[3] Prefabricated Scans"+"      [10] Disable Monitor Mode")
-    print ("[4] Payload Tools"+"            [11] Select a Target Network")
-    print ("[5] Hardware Tools"+"           [12] Show Public IP")
-    print ("[6] Cryptography Tools"+"       [b] back")
-    print ("[7] Misc Tools"+"               [x] exit")
+    print ("[1] Beacon/AP Spam")
+    print ("[2] Auth Dos Attack")  
+    print ("[3] Rouge AP")
+    print ("[4] Deauth Airplay Attack")
+    print ("[5] TKIP Attack")
+    print ("[6] AP Dump (See All nearby APs and Macs)"+"            ["+color.lightred+"b"+color.none+"] back")
+    print ("[7] ARP Scan"+"                                         ["+color.lightred+"x"+color.none+"] exit")
     print ("\n")
     choice = input("\n>>  ")
     wifi_exec_menu(choice)
@@ -963,35 +852,6 @@ def wifioption7():
     time.sleep(2)
     wifi_menu()
 
-def wifioption8():
-    print ("option 8")
-    time.sleep(2)
-    wifi_menu()
-
-def wifioption9():
-    print ("option 9")
-    time.sleep(2)
-    wifi_menu()
-
-def wifioption10():
-    print ("option 10")
-    time.sleep(2)
-    wifi_menu()
-
-def wifioption11():
-    print ("option 11")
-    time.sleep(2)
-    wifi_menu()
-
-def wifioption12():
-    print ("option 12")
-    time.sleep(2)
-    wifi_menu()
-
-def wifioption13():
-    print ("option 13")
-    time.sleep(2)
-    wifi_menu()
 
 #binds the options to numbers
 wifi_menu_actions = {
@@ -1004,12 +864,6 @@ wifi_menu_actions = {
     '5': wifioption5,
     '6': wifioption6,
     '7': wifioption7,
-    '8': wifioption8, 
-    '9': wifioption9,
-    '10': wifioption10,
-    '11': wifioption11, 
-    '12': wifioption12,
-    '13': wifioption13,
     'b': back,
     'x': exit,
 }
@@ -1040,14 +894,13 @@ def deselectint():
 #check if a computer only has ethernet
 
 def checkether():
-    iface = getinterface()
-    if iface == 'eth0':
+    if interface == 'eth0':
         print ("eth0")
-    elif iface == 'eth1':
+    elif interface == 'eth1':
         print ("eth1")
-    elif iface == 'eth2':
+    elif interface == 'eth2':
         print ("eth2")
-    elif iface == 'eth3':
+    elif interface == 'eth3':
         print ("eth3")
     else:
         time.sleep(2)
@@ -1055,38 +908,33 @@ def checkether():
 #change class to a function and return the value of getinterface to the parent function. change everything that currently says the class and use the function. 
 
 def getinterface():
-    interface = sp.getoutput("cat scrp/tmp/var.txt")
-    if interface == 'cat: scrp/tmp/var.txt: No such file or directory':
-        interface = 'No Interface Selected'
+    global interface
+    if os.path.isfile("scrp/tmp/var.txt"):
+        interface = sp.getoutput("cat scrp/tmp/var.txt")
     else:
+        interface = "No Interface Selected"
         time.sleep(0.1)
-    return interface
 
 
 #fixing error where networkselect.sh cant grab ifac int so the solution is to export iface int from here to a file and grab the file on shell and define a nw variable there
 
 def handlenamechange():
     flag = 'mon'
-    iface = getinterface()
-    if flag in iface :
-        namechange = iface
+    if flag in interface :
+        namechange = interface
     else:
-        namechange = iface+flag
-    return namechange
-
+        interface = interface+flag
 
 def exportint():
-    iface = handlenamechange()
-    os.system("echo "+iface+" > scrp/tmp/int.txt")
+    os.system("echo "+interface+" > scrp/tmp/int.txt")
     time.sleep(2)
 
 #show the interface mode
 def showinterface():
     clear()
-    nc = handlenamechange()
-    if nc is None:
-        nc = 'No interface selected'
-    print ("Currently Selected Interface:"+color.green+nc+color.none)
+    if interface is None:
+        interface = 'No interface selected'
+    print ("Currently Selected Interface:"+color.green+interface+color.none)
     print ("\n\n[1] Main Menu\n")
     yn = input ("Select an Option: ")
     if yn == '1':
@@ -1100,7 +948,7 @@ def showinterface():
 #function to call script for selecting a network and setting network name to a var
 def selectint():
     os.system("sudo bash scrp/iface.sh")
-    main_menu()
+    getinterface()
 
 #function to get the monitor mode and set to a variable
 
@@ -1133,8 +981,7 @@ def shownet():
 #functions for monitor mode
 
 def checkvar():
-    iface = getinterface()
-    if iface == 'No Interface Selected':
+    if interface == 'No Interface Selected':
         print ("Cannot continue no interface selected..")
         time.sleep(1)
         print ("Returning to Main Menu..")
@@ -1142,6 +989,8 @@ def checkvar():
         main_menu()
     else:
         time.sleep(0.1) 
+
+######fix####
 
 def monitoron():
     checkvar()
@@ -1163,11 +1012,18 @@ def monitoroff():
 #functions for spoofing mac#
 
 def randommac():
-    os.system("echo random mac")
+    os.system("bash scrp/ifaceformac.sh")
+    maciface = sp.getoutput("cat scrp/tmp/varformac.txt")
+
+    os.system("macchanger -r "+maciface)
 
 def choosemac():
-    os.system("echo choose mac")
+    os.system("bash scrp/ifaceformac.sh")
+    maciface = sp.getoutput("cat scrp/tmp/varformac.txt")
 
+    usermac = input("Type a new mac adress: ")
+    os.system("macchanger -m "+usermac+" "+maciface)
+    
 def resetmac():
     os.system("echo reset mac")
 
@@ -1269,12 +1125,60 @@ class exceptedforrot:
     wordlist = ['rot cypher', 'rot', 'rot encryption', 'rot-13', 'rot-17', 'rotcypher', 'rot 13', 'rot-17', 'rot-13 cypher', 'rot 13 cypher']
 
 class exceptedforcypher:
-    wordlist = ['cypher', 'cypto', 'cryptography', 'encryption', 'cyphers', 'encryptions', 'encode', 'decode']
+    wordlist = ['cypher', 'crypto', 'cryptography', 'encryption', 'cyphers', 'encryptions', 'encode', 'decode']
+
+class exceptedforwifi:
+    wordlist = ['mdk3', 'beacon flood', 'deauth', 'deauther', 'mdk4', 'beacon', 'dos', 'ddos', 'wifi attacks', 'wifiattacks', 'ap spam', 'ap crash', 'rouge ap', 'mitm', 'airplay', 'aircrack', 'tkip', 'tkip attack', 'airplay attack', 'ap dump', 'airodump', 'aircrack-ng', 'airodump-ng', 'nearby ap', 'ap', 'arp', 'arp scan', 'mdk3']
+
+class exceptedformdk3: 
+    wordlist = ['mdk3']
+
+class exceptedforbluetooth:
+    wordlist = ['bluetooth', 'spoof bluetooth', 'bluez', 'bluetooth dos', 'jam bluetooth', 'bluetooth jam', 'bluebooth jammer']
+
+
+
 
 #options
 
+def mdk3():
+    print ("Found "+color.lightgreen+searchvalue+color.none+" In: ")
+    print ("[1] mdk3")
+    print ("\n\n\n[b] Search Again")
+    print ("[x] Main Menu")
+    yesno = input("Select an Option: ")
+    yn = yesno.lower()
+    if yn == 'x':
+        main_menu()
+    elif yn == 'b' :
+        searchvar()
+    elif yn == '1' :
+        wifi_menu()
+    else:
+        clear()
+        print("invalid option")
+        macspoof()
+
+def wifi():
+    print ("Found "+color.lightgreen+searchvalue+color.none+" In: ")
+    print ("[1] Wifi Options Menu")
+    print ("\n\n\n[b] Search Again")
+    print ("[x] Main Menu")
+    yesno = input("Select an Option: ")
+    yn = yesno.lower()
+    if yn == 'x':
+        main_menu()
+    elif yn == 'b' :
+        searchvar()
+    elif yn == '1' :
+        wifi_menu()
+    else:
+        clear()
+        print("invalid option")
+        macspoof()
+
 def macspoof():
-    print ("Tools Found:")
+    print ("Found "+color.lightgreen+searchvalue+color.none+" In: ")
     print ("[1] Spoof Mac Address")
     print ("\n\n\n[b] Search Again")
     print ("[x] Main Menu")
@@ -1292,7 +1196,7 @@ def macspoof():
         macspoof()
 
 def monitormode():
-    print ("Tools Found:")
+    print ("Found "+color.lightgreen+searchvalue+color.none+" In: ")
     print ("[1] Turn Monitor Mode on")
     print ("[2] Turn Monitor Mode off")
     print ("[3] Show Current Interface")
@@ -1316,7 +1220,7 @@ def monitormode():
         monitormode()
 
 def netselection():
-    print ("Tools Found:")
+    print ("Found "+color.lightgreen+searchvalue+color.none+" In: ")
     print ("[1] Select a Network to Target")
     print ("[2] Deselct a Network")
     print ("[3] Show Currently Selected Network")
@@ -1340,7 +1244,7 @@ def netselection():
         netselection()
     
 def pubip():
-    print ("Tools Found:")
+    print ("Found "+color.lightgreen+searchvalue+color.none+" In: ")
     print ("[1] Show Public Ip")
     print ("\n\n\n[b] Search Again")
     print ("[x] Main Menu")
@@ -1358,7 +1262,7 @@ def pubip():
         pubip()
 
 def systeminfo():
-    print ("Tools Found:")
+    print ("Found "+color.lightgreen+searchvalue+color.none+" In: ")
     print ("[1] Show System info")
     print ("\n\n\n[b] Search Again")
     print ("[x] Main Menu")
@@ -1376,7 +1280,7 @@ def systeminfo():
         systeminfo()
 
 def base64encode():
-    print ("Tools Found:")
+    print ("Found "+color.lightgreen+searchvalue+color.none+" In: ")
     print ("[1] Base 64 Encode/Decode")
     print ("\n\n\n[b] Search Again")
     print ("[x] Main Menu")
@@ -1394,7 +1298,7 @@ def base64encode():
         systeminfo()
 
 def rotcypher():
-    print ("Tools Found:")
+    print ("Found "+color.lightgreen+searchvalue+color.none+" In: ")
     print ("[1] Rot Cypher Encode/Decode")
     print ("\n\n\n[b] Search Again")
     print ("[x] Main Menu")
@@ -1412,7 +1316,7 @@ def rotcypher():
         systeminfo()
 
 def cyphermenu():
-    print ("Tools Found:")
+    print ("Found "+color.lightgreen+searchvalue+color.none+" In: ")
     print ("[1] Cryptography Menu")
     print ("\n\n\n[b] Search Again")
     print ("[x] Main Menu")
@@ -1460,18 +1364,24 @@ def searchtool(searchvalue):
         cyphermenu()
     elif sv in exceptedforrot.wordlist :
         rotcypher()
+    elif sv in exceptedformdk3.wordlist :
+        mdk3()
+    elif sv in exceptedforwifi.wordlist :
+        wifi()
     else:
-        print("The tool you have searched for "+color.red+sv+color.none+" was unable to be found. Try being more specific (Common names of tools.)")
+        print("The tool you have searched for "+color.red+sv+color.none+" was unable to be found. Try being more concise (Common names of tools.)")
         time.sleep(4.5)
         searchvar()
     
 def searchvar():
     clear()
+    global searchvalue
     searchvalue = input("Search for a tool: ")
     searchtool(searchvalue)
     return
 
 ######################################################main menu#############################################################
+
 
 #defines the main menu
 menu_actions  = {}  
@@ -1479,10 +1389,18 @@ menu_actions  = {}
 def main_menu():
 
     handleexit()
-    var = sp.getoutput("cat scrp/tmp/var.txt")
     clear()
-    print ("Cora")
-    print ("By "+nvar.user+", "+nvar.date)
+    print (r""" 
+    ████████                              
+  ███░░░░░███                             
+ ███     ░░░   ██████  ████████   ██████  
+░███          ███░░███░░███░░███ ░░░░░███ 
+░███         ░███ ░███ ░███ ░░░   ███████ 
+░░███     ███░███ ░███ ░███      ███░░███ 
+ ░░█████████ ░░██████  █████    ░░████████
+  ░░░░░░░░░   ░░░░░░  ░░░░░      ░░░░░░░░ 
+  """)
+    print ("By "+nvar.user+", "+nvar.date+ "       Version: "+color.green+ nvar.version+color.none+"     Interface: "+color.green+interface+color.none)
     print ("Detailed documentation on the cora wiki found on https://github.com/clu3bot/cora\n\n")   ##fix 
     print ("[0] Search for a tool.\n")
     print ("[1] WiFi Tools"+"               [8] Spoof Mac Adress")
@@ -1492,8 +1410,8 @@ def main_menu():
     print ("                             [12] Select a Target Network")
     print ("[5] Hardware Tools"+"           [13] Show Public IP")
     print ("[6] Cryptography Tools"+"       [14] Show System Info")
-    print ("[7] Misc Tools"+"               [x] exit")
-    print ("                             [u] check for updates")
+    print ("[7] Misc Tools"+"               ["+color.lightred+"x"+color.none+"] exit")
+    print ("                             ["+color.lightred+"u"+color.none+"] check for updates")
     print ("\n")
     choice = input("\n>>  ")
     exec_menu(choice)
@@ -1620,19 +1538,18 @@ def check_install():
         print(color.red+"Run install.py")
         exit()
 
+#possible problem because selectint isnt returned
+
 #what is done on startup
 def onstartup():
     clear()
     check_install()
     os.system("rm -rf scrp/tmp/var.txt")
-    getinterface()
-    iface = getinterface()
+    selectint()
     initialload = "loading "
     print (initialload + nvar.project)
     time.sleep(0.5)
-    if iface is None:
-        selectint()
-    elif iface == 'No Interface Selected':
+    if interface is None:
         selectint()
     else:
         time.sleep(0.5)
