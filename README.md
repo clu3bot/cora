@@ -1,3 +1,6 @@
+<img src=media/cora.png align=center alt=banner />
+
+
 # cora
 cora - advanced tool kit
 
