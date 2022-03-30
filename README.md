@@ -1,10 +1,9 @@
 
 <p align=center>
 Cora Toolkit Created By Brennan Mccown
- 
+</p>
 <img src=media/cora.png align=center alt=banner />
 
-</p>
 # cora
 cora - advanced tool kit
 
