@@ -761,6 +761,47 @@ bluetooth_menu_actions = {
     'b': back,
     'x': exit,
 }
+#################################################wifi options#################################################
+
+def beaconspamnames():
+    
+    os.system("sudo mdk3 ")
+
+def beaconspamrandom():
+    
+    time.sleep(1)
+
+def beaconspam():
+    print("Beacon Spam Options:\n")
+    print("[1] Use Random AP Names")
+    print("[2] Use an Input file for AP Names")
+    opt = input("\n\nSelect an Option: ")
+    if opt == "1":
+        beaconspamrandom()
+    elif opt == "2":
+        beaconspamnames()
+    else:
+        clear()
+        print("Invalid Option "+color.red+opt+color.none)
+        beaconspam()
+def authdos():
+    time.sleep(1)
+
+def rougeap():
+    time.sleep(1)
+
+def deauth():
+    time.sleep(1)
+
+def tkip():
+    time.sleep(1)
+
+def apdump():
+    time.sleep(1)
+
+def arpscan():
+    time.sleep(1)
+
 
 ##################################################wifi menu###################################################
 
@@ -932,9 +973,7 @@ def exportint():
 #show the interface mode
 def showinterface():
     clear()
-    if interface is None:
-        interface = 'No interface selected'
-    print ("Currently Selected Interface:"+color.green+interface+color.none)
+    print ("Currently Selected Interface:"+color.green+ interface+color.none)
     print ("\n\n[1] Main Menu\n")
     yn = input ("Select an Option: ")
     if yn == '1':
@@ -1503,9 +1542,7 @@ def option14():
     sysinfo()
 
 def update():
-    os.system("sudo bash updates.sh")
-    main_menu()
-
+    os.system("sudo bash updates.pl")
 #binds the options to numbers
 menu_actions = {
     'main_menu': main_menu,
