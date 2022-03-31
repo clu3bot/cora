@@ -4,7 +4,7 @@ Cora Toolkit Created By Brennan Mccown
 </p>
 
 <p align=center>
-<img src=media/cora.png align=center alt=banner />
+<img src=media/cora2.png align=center alt=banner />
 </p>
 
 # Installation
