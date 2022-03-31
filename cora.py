@@ -1167,7 +1167,7 @@ class exceptedforcypher:
     wordlist = ['cypher', 'crypto', 'cryptography', 'encryption', 'cyphers', 'encryptions', 'encode', 'decode']
 
 class exceptedforwifi:
-    wordlist = ['mdk3', 'beacon flood', 'deauth', 'deauther', 'mdk4', 'beacon', 'dos', 'ddos', 'wifi attacks', 'wifiattacks', 'ap spam', 'ap crash', 'rouge ap', 'mitm', 'airplay', 'aircrack', 'tkip', 'tkip attack', 'airplay attack', 'ap dump', 'airodump', 'aircrack-ng', 'airodump-ng', 'nearby ap', 'ap', 'arp', 'arp scan', 'mdk3']
+    wordlist = ['mdk3','beacon spam', 'beacon flood', 'deauth', 'deauther', 'mdk4', 'beacon', 'dos', 'ddos', 'wifi attacks', 'wifiattacks', 'ap spam', 'ap crash', 'rouge ap', 'mitm', 'airplay', 'aircrack', 'tkip', 'tkip attack', 'airplay attack', 'ap dump', 'airodump', 'aircrack-ng', 'airodump-ng', 'nearby ap', 'ap', 'arp', 'arp scan', 'mdk3']
 
 class exceptedformdk3: 
     wordlist = ['mdk3']
