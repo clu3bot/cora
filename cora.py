@@ -763,44 +763,35 @@ bluetooth_menu_actions = {
 }
 #################################################wifi options#################################################
 
-def beaconspamnames():
-    
-    os.system("sudo mdk3 ")
-
-def beaconspamrandom():
-    
-    time.sleep(1)
 
 def beaconspam():
-    print("Beacon Spam Options:\n")
-    print("[1] Use Random AP Names")
-    print("[2] Use an Input file for AP Names")
-    opt = input("\n\nSelect an Option: ")
-    if opt == "1":
-        beaconspamrandom()
-    elif opt == "2":
-        beaconspamnames()
-    else:
-        clear()
-        print("Invalid Option "+color.red+opt+color.none)
-        beaconspam()
+    os.system("echo "+interface+" scrp/wifitools/tmp/int.txt")
+    os.system("sudo python3 scrp/wifitools/beaconspam.py")
+    
 def authdos():
-    time.sleep(1)
+    os.system("echo "+interface+" scrp/wifitools/tmp/int.txt")
+    os.system("sudo bash scrp/wifitools/authdos.sh")
 
 def rougeap():
-    time.sleep(1)
+    os.system("echo "+interface+" scrp/wifitools/tmp/int.txt")
+    os.system("sudo bash scrp/wifitools/rougeap.sh")
 
 def deauth():
-    time.sleep(1)
+    os.system("echo "+interface+" scrp/wifitools/tmp/int.txt")
+    os.system("sudo bash scrp/wifitools/deauth.sh")
 
 def tkip():
-    time.sleep(1)
+    os.system("echo "+interface+" scrp/wifitools/tmp/int.txt")
+    os.system("sudo bash scrp/wifitools/tkip.sh")
 
 def apdump():
-    time.sleep(1)
+    os.system("echo "+interface+" scrp/wifitools/tmp/int.txt")
+    os.system("sudo bash scrp/wifitools/apdump.sh")
 
 def arpscan():
-    time.sleep(1)
+    os.system("echo "+interface+" scrp/wifitools/tmp/int.txt")
+    os.system("sudo bash scrp/wifitools/arpscan.sh")
+
 
 
 ##################################################wifi menu###################################################
@@ -815,7 +806,6 @@ def wifi_menu():
     print ("Wifi Tool Options")
     print ("By "+nvar.user+", "+nvar.date)
     print ("Detailed documentation on the cora wiki found on https://github.com/chimerafoundation/befw\n\n")   ##fix 
-    print ("[0] Search for a tool.\n")
     print ("[1] Beacon/AP Spam")
     print ("[2] Auth Dos Attack")  
     print ("[3] Rouge AP")
@@ -853,51 +843,32 @@ def exit():
     sys.exit()
 
 #defines the options for the main menu
-def wifioption0():
-    print ("option 0")
-    time.sleep(2)
-    wifi_menu()
 
 def wifioption1():
-    print ("wifi option 1")
-    time.sleep(2)    
-    wifi_menu()
+    beaconspam()
 
 def wifioption2():
-    print ("option 2")
-    time.sleep(2)    
-    wifi_menu()
+    authdos()
 
 def wifioption3():
-    print ("option 3")
-    time.sleep(2)
-    wifi_menu()
+    rougeap()
 
 def wifioption4():
-    print ("option 4")
-    time.sleep(2)
-    wifi_menu()
+    deauth()
 
 def wifioption5():
-    print ("option 5")
-    time.sleep(2)    
-    wifi_menu()
+    tkip()
 
 def wifioption6():
-    print ("option 6")
-    time.sleep(2)    
-    wifi_menu()
+    apdump()
 
 def wifioption7():
-    print ("option 7")
-    time.sleep(2)
-    wifi_menu()
+    arpscan()
 
 
 #binds the options to numbers
 wifi_menu_actions = {
     'main_menu': wifi_menu,
-    '0': wifioption0,
     '1': wifioption1,    
     '2': wifioption2,
     '3': wifioption3,
@@ -1167,7 +1138,7 @@ class exceptedforcypher:
     wordlist = ['cypher', 'crypto', 'cryptography', 'encryption', 'cyphers', 'encryptions', 'encode', 'decode']
 
 class exceptedforwifi:
-    wordlist = ['mdk3','beacon spam', 'beacon flood', 'deauth', 'deauther', 'mdk4', 'beacon', 'dos', 'ddos', 'wifi attacks', 'wifiattacks', 'ap spam', 'ap crash', 'rouge ap', 'mitm', 'airplay', 'aircrack', 'tkip', 'tkip attack', 'airplay attack', 'ap dump', 'airodump', 'aircrack-ng', 'airodump-ng', 'nearby ap', 'ap', 'arp', 'arp scan', 'mdk3']
+    wordlist = ['mdk3', 'beacon flood', 'deauth', 'deauther', 'mdk4', 'beacon', 'dos', 'ddos', 'wifi attacks', 'wifiattacks', 'ap spam', 'ap crash', 'rouge ap', 'mitm', 'airplay', 'aircrack', 'tkip', 'tkip attack', 'airplay attack', 'ap dump', 'airodump', 'aircrack-ng', 'airodump-ng', 'nearby ap', 'ap', 'arp', 'arp scan', 'mdk3']
 
 class exceptedformdk3: 
     wordlist = ['mdk3']
