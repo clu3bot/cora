@@ -40,6 +40,7 @@
 
 
 from select import select
+from statistics import mode
 import sys
 import random as rd
 import os
@@ -761,35 +762,127 @@ bluetooth_menu_actions = {
     'b': back,
     'x': exit,
 }
-#################################################wifi options#################################################
+#beacon spam
+
+def beaconmonitor():
+    response = input("Would you like to enable Monitor Mode? (Y/N)")
+
+    lowresponse = response.lower()
+    if lowresponse == 'y':
+        clear()
+        os.system("sudo airmon-ng start "+interface)
+        beaconspam()
+
+    elif lowresponse == 'n':
+        clear()
+        print ("This part of the program requires Monitor Mode")
+        userinp = input ("Press Y to enable monitor or Press X to return to Main Menu..")
+        lowuserinp = userinp.lower()
+        if lowuserinp == "y":
+            os.system("sudo airmon-ng start "+interface)
+        elif lowuserinp == "x":
+            clear()
+            print ("Returning to Main Menu..")
+            main_menu()
+        else:
+            clear()
+            print ("Invalid Option..")
+            beaconmonitor()
+    else:
+        clear()
+        print ("Invalid Option..")
+        beaconmonitor()
+
+def beaconcheckmode():
+
+    if "mon" in interface:
+        mode = "check"
+    else:
+        mode = "null"
+
+    if mode == "null":
+        beaconmonitor()
+
+def beaconrandomnames():
+    clear()
+    beaconcheckmode()
+    print ("Starting..")
+    time.sleep(0.5)
+    print (color.lightgreen+"[Beacon Spam Active]"+color.none)
+    os.system("sudo mdk3 "+interface+" b -s 500")
+
+def beaconnamesfile():
+    clear()
+    beaconcheckmode()
+    print ("File must be located in "+color.lightred+" /cora/scrp/wifitools/ess"+color.none)
+    if os.path.isfile("scrp/wifitools/tmp/file.txt"):
+        clear()
+        defaultfile = sp.getoutput("cat scrp/wifitools/tmp/file.txt")
+        ask = input("File "+defaultfile+" is currently set as your default names file, is this the file you would like to use? (Y/N)")
+        asklower = ask.lower()
+        if asklower == "y":
+            time.sleep(1)
+        elif asklower == "n":
+            clear()
+            print ("File must be located in "+color.lightred+" /cora/scrp/wifitools/ess"+color.none)
+            file = input ("What is the name of the file Including file extention. Example "+color.lightgreen+"file.txt"+color.none+": ")
+        else:
+            clear()
+            print ("File must be located in "+color.lightred+" /cora/scrp/wifitools/ess"+color.none)
+            file = input ("What is the name of the file Including file extention. Example "+color.lightgreen+"file.txt"+color.none+": ")
+
+    if os.path.isfile("/ess/"+file):
+        question = input ("Would you like to set this File as your Default File? (Y/N)")
+
+        lowquestion = question.lower()
+        if lowquestion == "y":
+            os.system("echo "+file+" > scrp/wifitools/tmp/file.txt")
+        elif lowquestion == "n":
+            time.sleep(1)
+        else:
+            print("Invalid Option..")
+    else:
+        clear()
+        print("File could not located in "+color.lightred+"/cora/scrp/wifitools/ess"+color.none)
+        time.sleep(4)
+        beaconnamesfile()       
 
 
 def beaconspam():
-    os.system("echo "+interface+" scrp/wifitools/tmp/int.txt")
-    os.system("sudo python3 scrp/wifitools/beaconspam.py")
-    
-def authdos():
-    os.system("echo "+interface+" scrp/wifitools/tmp/int.txt")
+    print ("Beacon Flood Options:\n\n")
+    print ("[1] Use Random Names")
+    print ("[2] Use a Names File")
+    i = input ("\n\nChoose an Option: ")
+
+    if i == "1":
+        beaconrandomnames()
+    elif i == "2":
+        beaconnamesfile()
+    else:
+        print ("Invalid Option")
+
+#################################################wifi options#################################################
+
+
+def beaconspamcall():
+    beaconspam()
+
+def authdoscall():
     os.system("sudo bash scrp/wifitools/authdos.sh")
 
-def rougeap():
-    os.system("echo "+interface+" scrp/wifitools/tmp/int.txt")
+def rougeapcall():
     os.system("sudo bash scrp/wifitools/rougeap.sh")
 
-def deauth():
-    os.system("echo "+interface+" scrp/wifitools/tmp/int.txt")
+def deauthcall():
     os.system("sudo bash scrp/wifitools/deauth.sh")
 
-def tkip():
-    os.system("echo "+interface+" scrp/wifitools/tmp/int.txt")
+def tkipcall():
     os.system("sudo bash scrp/wifitools/tkip.sh")
 
-def apdump():
-    os.system("echo "+interface+" scrp/wifitools/tmp/int.txt")
+def apdumpcall():
     os.system("sudo bash scrp/wifitools/apdump.sh")
 
-def arpscan():
-    os.system("echo "+interface+" scrp/wifitools/tmp/int.txt")
+def arpscancall():
     os.system("sudo bash scrp/wifitools/arpscan.sh")
 
 
@@ -845,25 +938,25 @@ def exit():
 #defines the options for the main menu
 
 def wifioption1():
-    beaconspam()
+    beaconspamcall()
 
 def wifioption2():
-    authdos()
+    authdoscall()
 
 def wifioption3():
-    rougeap()
+    rougeapcall()
 
 def wifioption4():
-    deauth()
+    deauthcall()
 
 def wifioption5():
-    tkip()
+    tkipcall()
 
 def wifioption6():
-    apdump()
+    apdumpcall()
 
 def wifioption7():
-    arpscan()
+    arpscancall()
 
 
 #binds the options to numbers
@@ -1106,6 +1199,31 @@ spoofmenu_actions = {
     'x': exit,
 }
 
+#dev term
+def devtermcoraman():
+    print("Commands: \n")
+    print("interface - Shows Interface")
+    print("clear - Clears Terminal")
+    print("man - Displays Manual")
+
+def devterm():
+    term = input (color.green+"system@cora"+color.none+": ")
+    termlow = term.lower()
+
+    if termlow == "interface":
+        print (interface)
+        devterm()
+    elif termlow == "clear":
+        clear()
+        devterm()
+    elif termlow == "man":
+        devtermcoraman()
+        devterm()
+    else:
+        print (color.none+"Invalid command "+color.red+term+color.none)
+        devterm()
+
+
 ####################################################search funtion#########################################################
 
 #tool keyword flag data
@@ -1146,10 +1264,15 @@ class exceptedformdk3:
 class exceptedforbluetooth:
     wordlist = ['bluetooth', 'spoof bluetooth', 'bluez', 'bluetooth dos', 'jam bluetooth', 'bluetooth jam', 'bluebooth jammer']
 
-
+class exceptedfordevterm:
+    wordlist = ['dev']
 
 
 #options
+
+def dev():
+    clear()
+    devterm()
 
 def mdk3():
     print ("Found "+color.lightgreen+searchvalue+color.none+" In: ")
@@ -1378,6 +1501,8 @@ def searchtool(searchvalue):
         mdk3()
     elif sv in exceptedforwifi.wordlist :
         wifi()
+    elif sv in exceptedfordevterm.wordlist:
+        dev()
     else:
         print("The tool you have searched for "+color.red+sv+color.none+" was unable to be found. Try being more concise (Common names of tools.)")
         time.sleep(4.5)
