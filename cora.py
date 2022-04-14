@@ -762,7 +762,7 @@ bluetooth_menu_actions = {
     'b': back,
     'x': exit,
 }
-#beacon spam
+#beacon spam fix a few things since this code was moved from another directory
 
 def beaconmonitor():
     response = input("Would you like to enable Monitor Mode? (Y/N)")
@@ -861,6 +861,19 @@ def beaconspam():
     else:
         print ("Invalid Option")
 
+
+#authdos
+
+def authdos():
+    time.sleep(1)
+
+#arpscan
+
+def arpscan():
+    os.system("rm -rf scrp/wifitools/tmp/int.txt")
+    os.system("echo "+interface+" > scrp/wifitools/tmp/int.txt")
+    os.system("sudo bash scrp/wifitools/arpscan.sh")
+
 #################################################wifi options#################################################
 
 
@@ -868,7 +881,7 @@ def beaconspamcall():
     beaconspam()
 
 def authdoscall():
-    os.system("sudo bash scrp/wifitools/authdos.sh")
+    authdos()
 
 def rougeapcall():
     os.system("sudo bash scrp/wifitools/rougeap.sh")
@@ -883,7 +896,7 @@ def apdumpcall():
     os.system("sudo bash scrp/wifitools/apdump.sh")
 
 def arpscancall():
-    os.system("sudo bash scrp/wifitools/arpscan.sh")
+    arpscan()
 
 
 
@@ -1213,6 +1226,16 @@ def devterm():
     if termlow == "interface":
         print (interface)
         devterm()
+    elif termlow == "interface -tmp":
+        if os.path.isfile("scrp/wifitools/tmp/int.txt"):
+            z = sp.getoutput("cat scrp/wifitools/tmp/int.txt")
+            print(z)
+            devterm()
+        else:
+            print("Interface has not been defined")
+            devterm()
+    elif termlow == "back":
+        main_menu()
     elif termlow == "clear":
         clear()
         devterm()
@@ -1220,7 +1243,7 @@ def devterm():
         devtermcoraman()
         devterm()
     else:
-        print (color.none+"Invalid command "+color.red+term+color.none)
+        os.system(termlow)
         devterm()
 
 
@@ -1256,7 +1279,7 @@ class exceptedforcypher:
     wordlist = ['cypher', 'crypto', 'cryptography', 'encryption', 'cyphers', 'encryptions', 'encode', 'decode']
 
 class exceptedforwifi:
-    wordlist = ['mdk3', 'beacon flood', 'deauth', 'deauther', 'mdk4', 'beacon', 'dos', 'ddos', 'wifi attacks', 'wifiattacks', 'ap spam', 'ap crash', 'rouge ap', 'mitm', 'airplay', 'aircrack', 'tkip', 'tkip attack', 'airplay attack', 'ap dump', 'airodump', 'aircrack-ng', 'airodump-ng', 'nearby ap', 'ap', 'arp', 'arp scan', 'mdk3']
+    wordlist = ['mdk3', 'arpscan', 'arp', 'arp scan', 'beacon flood', 'deauth', 'deauther', 'mdk4', 'beacon', 'dos', 'ddos', 'wifi attacks', 'wifiattacks', 'ap spam', 'ap crash', 'rouge ap', 'mitm', 'airplay', 'aircrack', 'tkip', 'tkip attack', 'airplay attack', 'ap dump', 'airodump', 'aircrack-ng', 'airodump-ng', 'nearby ap', 'ap', 'arp', 'arp scan', 'mdk3']
 
 class exceptedformdk3: 
     wordlist = ['mdk3']
@@ -1272,6 +1295,7 @@ class exceptedfordevterm:
 
 def dev():
     clear()
+    print("Type "+color.red+"back"+color.none+" to return to main menu.")
     devterm()
 
 def mdk3():
