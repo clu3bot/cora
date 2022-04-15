@@ -17,7 +17,7 @@ end(){
         echo -e "\n${NONE}[${LGREEN}${int}${NONE}] Selected"
         read -r -p "$(tput setaf 7)Press Enter to Continue.."
         rm -rf scrp/tmp/wifiifaces.csv
-        export int
+        echo "$int" > scrp/tmp/int.txt
 }
 
 notvalid(){
