@@ -39,6 +39,7 @@
 ##################################################################################
 
 
+from enum import Flag
 from select import select
 from statistics import mode
 import sys
@@ -101,8 +102,8 @@ def getos():
         quit()
 
 def getmode():
-    global mode
-    mode = sp.getoutput("sudo bash scrp/checkmode.sh")
+    global modeint
+    modeint = sp.getoutput("sudo bash scrp/checkmode.sh")
 
 
 def checkmonitor():
@@ -116,6 +117,8 @@ def checkmonitor():
     else:
         print ("Error")
 
+class flags:
+    flag = "mon"
 
 #################################################hardware menu###################################################
 
@@ -335,6 +338,12 @@ payload_menu_actions = {
     'b': back,
     'x': exit,
 }
+############misc tools
+
+def devmisc():
+
+    devterm()
+
 
 #################################################misc menu###################################################
 
@@ -349,7 +358,7 @@ def misc_menu():
     print ("By "+nvar.user+", "+nvar.date)
     print ("Detailed documentation on the cora wiki found on https://github.com/chimerafoundation/befw\n\n")   ##fix 
     print ("[0] Search for a tool.\n")
-    print ("[1] WiFi Tools"+"               [8] Spoof Mac Adress")
+    print ("[1] Dev Terminal"+"               [8] Spoof Mac Adress")
     print ("[2] Bluetooth Tools"+"          [9] Enable Monitor Mode")  
     print ("[3] Prefabricated Scans"+"      [10] Disable Monitor Mode")
     print ("[4] Payload Tools"+"            [11] Select a Target Network")
@@ -392,9 +401,7 @@ def miscoption0():
     misc_menu()
 
 def miscoption1():
-    print ("wifi option 1")
-    time.sleep(2)    
-    misc_menu()
+    devmisc()
 
 def miscoption2():
     print ("option 2")
@@ -1026,7 +1033,6 @@ def publicip():
 def deselectint():
     print ("deselect net")
 
-
 #check if a computer only has ethernet
 
 def checkether():
@@ -1045,8 +1051,8 @@ def checkether():
 
 def getinterface():
     global interface
-    if os.path.isfile("scrp/iface.sh"):
-        print (os.environ["int"])
+    if os.path.isfile("scrp/tmp/int.txt"):
+        interface = sp.getoutput("cat scrp/tmp/int.txt")    
         main_menu()
     else:
         interface = "No Interface Selected"
@@ -1056,20 +1062,30 @@ def getinterface():
 #fixing error where networkselect.sh cant grab ifac int so the solution is to export iface int from here to a file and grab the file on shell and define a nw variable there
 
 def handlenamechange():
-    flag = 'mon'
-    if flag in interface :
-        namechange = interface
+    checkmonitor()
+    global interfacecurrent
+    if checkmode == 0:
+        interfacecurrent = interface
+    elif checkmode == 1:
+        interfacecurrent = interface+flags.flag
     else:
-        interface = interface+flag
+        interfacecurrent = "No Interface Selected"
+
+def test():
+    flag = "mon"
+    test = interface+flag
+    print (test)
 
 def exportint():
-    os.system("echo "+interface+" > scrp/tmp/int.txt")
+    handlenamechange()
+    os.system("echo "+interfacecurrent+" > scrp/tmp/intexport.txt")
     time.sleep(2)
 
 #show the interface mode
 def showinterface():
     clear()
-    print ("Currently Selected Interface:"+color.green+ interface+color.none)
+    handlenamechange()
+    print ("Currently Selected Interface:"+color.green+ interfacecurrent+color.none)
     print ("\n\n[1] Main Menu\n")
     yn = input ("Select an Option: ")
     if yn == '1':
@@ -1097,7 +1113,6 @@ def getmode():
 
 def selectnet():
     clear()
-
     exportint()
     os.system("sudo bash scrp/networkselect.sh")
     time.sleep(2)
@@ -1116,7 +1131,8 @@ def shownet():
 #functions for monitor mode
 
 def checkvar():
-    if interface == 'No Interface Selected':
+    handlenamechange()
+    if interfacecurrent == 'No Interface Selected':
         print ("Cannot continue no interface selected..")
         time.sleep(1)
         print ("Returning to Main Menu..")
@@ -1129,13 +1145,13 @@ def checkvar():
 
 def monitoron():
     checkvar()
-    nc = getinterface()
+    nc = handlenamechange()
     os.system("sudo ifconfig "+nc+" up")
     os.system("sudo airmon-ng start "+nc)
     handlenamechange()
     main_menu()
 
-    #left off trying to find a way to update the interface variable in order to change interface variable from update after one of these options is chosen
+#left off trying to find a way to update the interface variable in order to change interface variable from update after one of these options is chosen
 
 def monitoroff():
     checkvar()
@@ -1144,7 +1160,7 @@ def monitoroff():
     os.system("sudo airmon-ng stop "+nc)
     main_menu()
 
-#functions for spoofing mac#
+#functions for spoofing mac# needs to be finished
 
 def randommac():
     os.system("bash scrp/ifaceformac.sh")
@@ -1258,6 +1274,9 @@ def devterm():
     elif termlow == "clear":
         clear()
         devterm()
+    elif termlow == "test":
+        clear()
+        test()
     elif termlow == "man":
         devtermcoraman()
         devterm()
@@ -1565,7 +1584,7 @@ def searchvar():
 menu_actions  = {}  
 
 def main_menu():
-
+    handlenamechange()
     handleexit()
     clear()
     print (r""" 
@@ -1578,7 +1597,7 @@ def main_menu():
  ░░█████████ ░░██████  █████    ░░████████
   ░░░░░░░░░   ░░░░░░  ░░░░░      ░░░░░░░░ 
   """)
-    print ("By "+nvar.user+", "+nvar.date+ "       Version: "+color.green+ nvar.version+color.none+"     Interface: "+color.green+interface+color.none)
+    print ("By "+nvar.user+", "+nvar.date+ "       Version: "+color.green+ nvar.version+color.none+"     Interface: "+color.green+interfacecurrent+color.none)
     print ("Detailed documentation on the cora wiki found on https://github.com/clu3bot/cora\n\n")   ##fix 
     print ("[0] Search for a tool.\n")
     print ("[1] WiFi Tools"+"               [8] Spoof Mac Adress")
