@@ -16,9 +16,8 @@ var=1000
 end(){
         echo -e "\n${NONE}[${LGREEN}${int}${NONE}] Selected"
         read -r -p "$(tput setaf 7)Press Enter to Continue.."
-        echo "$int" > scrp/tmp/var.txt
         rm -rf scrp/tmp/wifiifaces.csv
-
+        export int
 }
 
 notvalid(){
@@ -33,7 +32,6 @@ end
 valid(){
         rm -rf scrp/tmp/var.txt
                 clear
-                echo "${int}" > scrp/tmp/var.txt
         sleep 0.5
 end
 }
@@ -49,7 +47,6 @@ inputvalidation(){
 
 output(){
         unset $int
-                rm -rf scrp/tmp/var.txt
                 clear
                         echo -e "Select an Interface:\n"
                         iwconfig 2>&1 | grep -oP "^\w+" > scrp/tmp/wifiifaces.csv
