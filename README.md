@@ -2,7 +2,7 @@
 # Not stable do not download
 
 <p align=center>
-Cora Toolkit Created By Brennan Mccown
+Cora Toolkit Created By Brennan McCown
 </p>
 
 <p align=center>
