@@ -100,6 +100,22 @@ def getos():
         time.sleep(2)
         quit()
 
+def getmode():
+    global mode
+    mode = sp.getoutput("sudo bash scrp/checkmode.sh")
+
+
+def checkmonitor():
+    cm = sp.getoutput("sudo bash scrp/checkmode.sh")
+
+    global checkmode
+    if cm == "Monitor":
+        checkmode = 1
+    elif cm == "Managed":
+        checkmode = 0
+    else:
+        print ("Error")
+
 
 #################################################hardware menu###################################################
 
@@ -762,6 +778,8 @@ bluetooth_menu_actions = {
     'b': back,
     'x': exit,
 }
+
+
 #beacon spam fix a few things since this code was moved from another directory
 
 def beaconmonitor():
@@ -794,14 +812,13 @@ def beaconmonitor():
         beaconmonitor()
 
 def beaconcheckmode():
-
-    if "mon" in interface:
-        mode = "check"
-    else:
-        mode = "null"
-
-    if mode == "null":
+    checkmonitor()
+    if checkmode == 1:
+        time.sleep(0)
+    elif checkmode == 0:
         beaconmonitor()
+    else:
+        print("An error has occured")
 
 def beaconrandomnames():
     clear()
@@ -849,6 +866,7 @@ def beaconnamesfile():
 
 
 def beaconspam():
+    beaconcheckmode()
     print ("Beacon Flood Options:\n\n")
     print ("[1] Use Random Names")
     print ("[2] Use a Names File")
@@ -1027,8 +1045,9 @@ def checkether():
 
 def getinterface():
     global interface
-    if os.path.isfile("scrp/tmp/var.txt"):
-        interface = sp.getoutput("cat scrp/tmp/var.txt")
+    if os.path.isfile("scrp/iface.sh"):
+        print (os.environ["int"])
+        main_menu()
     else:
         interface = "No Interface Selected"
         time.sleep(0.1)
@@ -1702,7 +1721,6 @@ def check_install():
 def onstartup():
     clear()
     check_install()
-    os.system("rm -rf scrp/tmp/var.txt")
     selectint()
     initialload = "loading "
     print (initialload + nvar.project)
