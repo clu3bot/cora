@@ -53,7 +53,6 @@ import os.path
 import platform
 import argparse as ag
 
-
 #vars for script
 class nvar:
     version="1.0 Beta"
@@ -886,7 +885,6 @@ def beaconspam():
     else:
         print ("Invalid Option")
 
-
 #authdos
 
 def authdos():
@@ -1010,6 +1008,16 @@ wifi_menu_actions = {
     'b': back,
     'x': exit,
 }
+
+#check internet connection
+
+
+#sms messaging
+
+def sms():
+    clear()
+
+    os.system("sudo bash sms.sh")
 
 #function to call system info script
 def sysinfo():
