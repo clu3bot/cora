@@ -1017,7 +1017,7 @@ wifi_menu_actions = {
 def sms():
     clear()
 
-    os.system("sudo bash sms.sh")
+    os.system("sudo bash scrp/sms.sh")
 
 #function to call system info script
 def sysinfo():
