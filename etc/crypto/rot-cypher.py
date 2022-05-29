@@ -5,9 +5,9 @@ def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def initial():
-
+    clear()
     alphabets = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-
+    
     input_str = input("Enter message that you would like to encrypt/decrypt: ")
     value = input_str.upper()
     initialshift = int(input("Enter a shift value: "))
@@ -26,6 +26,7 @@ def initial():
 
     new_output = output_str.lower()
 
+    clear()
     print ("Output: "+new_output)
     return new_output
 
