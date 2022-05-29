@@ -5,23 +5,12 @@ import time
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
-def initial():
+def last():
     clear()
-
-    userinput = input("Encode/Decode base64: ")
-    inputencode = userinput.encode("ascii")
-  
-    base64encode = base64.b64encode(inputencode)
-    base64str = base64encode.decode("ascii")
-  
-    print("Encoded/Decoded string: "+base64str)
-    return base64str
-
-initial()
+    input ("Press any key to return to Crypto Menu..")
 
 def ask():
 
-    base64str = initial()
     clear()
     print (base64str)
     userchoice = input ("Save this string to a file? y/n")
@@ -37,11 +26,50 @@ def ask():
         time.sleep(2)
         ask()
 
-ask()
+def encode():
+
+    clear()
+
+    userinput = input("Encode base64: ")
+    inputencode = userinput.encode("ascii")
+  
+    base64encode = base64.b64encode(inputencode)
+    global base64str
+    base64str = base64encode.decode("ascii")
+  
+    print("Encoded string: "+base64str)
+
+    ask()
+
+def decode():
+    clear()
+    userinput = input("Decode base64: ")
+    inputdecode = base64.b64decode(userinput)
+
+    global base64str
+    base64str = str(inputdecode)
+    print("Decoded string: "+base64str)
+
+    ask()
+
+def menu():
+    clear()
+
+    print ("1. Encode")
+    print ("2. Decode")
+
+    usernumber = input("\nSelect an Option: ")
+
+    if usernumber == "1":
+        encode()
+    elif usernumber == "2":
+        decode()
+    else:
+        time.sleep(1)
+        print ("Invalid option")
+
+menu()
 
 def last():
     clear()
     input ("Press any key to return to Crypto Menu..")
-
-last()
-
