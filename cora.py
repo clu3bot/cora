@@ -357,8 +357,8 @@ def misc_menu():
     print ("By "+nvar.user+", "+nvar.date)
     print ("Detailed documentation on the cora wiki found on https://github.com/chimerafoundation/befw\n\n")   ##fix 
     print ("[0] Search for a tool.\n")
-    print ("[1] Dev Terminal"+"               [8] Spoof Mac Adress")
-    print ("[2] Bluetooth Tools"+"          [9] Enable Monitor Mode")  
+    print ("[1] Dev Terminal"+"             [8] Spoof Mac Adress")
+    print ("[2] Send Sms"+"                 [9] Enable Monitor Mode")  
     print ("[3] Prefabricated Scans"+"      [10] Disable Monitor Mode")
     print ("[4] Payload Tools"+"            [11] Select a Target Network")
     print ("[5] Hardware Tools"+"           [12] Show Public IP") 
@@ -403,9 +403,7 @@ def miscoption1():
     devmisc()
 
 def miscoption2():
-    print ("option 2")
-    time.sleep(2)    
-    misc_menu()
+    sms()
 
 def miscoption3():
     print ("option 3")
