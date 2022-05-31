@@ -1039,72 +1039,17 @@ def publicip():
 def deselectint():
     print ("deselect net")
 
-#check if a computer only has ethernet
-
-def checkether():
-    if interface == 'eth0':
-        print ("eth0")
-    elif interface == 'eth1':
-        print ("eth1")
-    elif interface == 'eth2':
-        print ("eth2")
-    elif interface == 'eth3':
-        print ("eth3")
-    else:
-        time.sleep(2)
- 
-#change class to a function and return the value of getinterface to the parent function. change everything that currently says the class and use the function. 
-
 def getinterface():
-    global interface
-    if os.path.isfile("scrp/tmp/int.txt"):
-        interface = sp.getoutput("cat scrp/tmp/int.txt")    
-        main_menu()
-    else:
-        interface = "No Interface Selected"
-        time.sleep(0.1)
-
-
-#fixing error where networkselect.sh cant grab ifac int so the solution is to export iface int from here to a file and grab the file on shell and define a nw variable there
-
-def handlenamechange():
-    checkmonitor()
     global interfacecurrent
-    if checkmode == 0:
-        interfacecurrent = interface
-    elif checkmode == 1:
-        interfacecurrent = interface+flags.flag
-    else:
-        interfacecurrent = "No Interface Selected"
-
-def test():
-    flag = "mon"
-    test = interface+flag
-    print (test)
-
-def exportint():
-    handlenamechange()
-    os.system("echo "+interfacecurrent+" > scrp/tmp/intexport.txt")
-    time.sleep(2)
+    interfacecurrent = sp.getoutput("sudo python3 scrp/inthandler/rename.py")
 
 #show the interface mode
 def showinterface():
-    clear()
-    handlenamechange()
-    print ("Currently Selected Interface:"+color.green+ interfacecurrent+color.none)
-    print ("\n\n[1] Main Menu\n")
-    yn = input ("Select an Option: ")
-    if yn == '1':
-        main_menu()
-    else:
-        clear()
-        print ("Invalid Option")
-        time.sleep(1)
-        showinterface()
+    time.sleep(1) #fix
     
 #function to call script for selecting a network and setting network name to a var
 def selectint():
-    os.system("sudo bash scrp/iface.sh")
+    os.system("sudo bash scrp/inthandler/selectint.sh")
     getinterface()
 
 #function to get the monitor mode and set to a variable
@@ -1134,36 +1079,29 @@ def shownet():
     print("show net")
     time.sleep(2)
 
-#functions for monitor mode
-
-def checkvar():
-    handlenamechange()
-    if interfacecurrent == 'No Interface Selected':
-        print ("Cannot continue no interface selected..")
-        time.sleep(1)
-        print ("Returning to Main Menu..")
-        time.sleep(2)
-        main_menu()
-    else:
-        time.sleep(0.1) 
 
 ######fix####
 
 def monitoron():
-    checkvar()
-    nc = handlenamechange()
-    os.system("sudo ifconfig "+nc+" up")
-    os.system("sudo airmon-ng start "+nc)
-    handlenamechange()
+    getinterface()
+    if "mon" in interfacecurrent:
+        print ("You are already in Monitor Mode")
+        time.sleep(2.5)
+        main_menu()
+    else:
+        os.system("sudo bash scrp/inthandler/monitormode.sh")
     main_menu()
 
 #left off trying to find a way to update the interface variable in order to change interface variable from update after one of these options is chosen
 
 def monitoroff():
-    checkvar()
-    nc = handlenamechange()
-    os.system("sudo ifconfig "+nc+"up")
-    os.system("sudo airmon-ng stop "+nc)
+    getinterface()
+    if "mon" in interfacecurrent:
+        os.system("sudo bash scrp/inthandler/managedmode.sh")   
+    else:
+         print ("You are not in Monitor Mode")
+         time.sleep(2.5)
+         main_menu()
     main_menu()
 
 #functions for spoofing mac# needs to be finished
@@ -1590,8 +1528,8 @@ def searchvar():
 menu_actions  = {}  
 
 def main_menu():
-    handlenamechange()
     handleexit()
+    getinterface()
     clear()
     print (r""" 
     ████████                              
@@ -1750,10 +1688,10 @@ def onstartup():
     initialload = "loading "
     print (initialload + nvar.project)
     time.sleep(0.5)
-    if interface is None:
+    if interfacecurrent is None:
         selectint()
     else:
-        time.sleep(0.5)
+        time.sleep(0)
     if os.path.isfile("install.sh"):
         print ("please run the install.sh file in the "+nvar.project+"/ directory")
     else:
