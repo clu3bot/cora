@@ -39,6 +39,7 @@
 ##################################################################################
 
 
+from ast import Global
 from enum import Flag
 from select import select
 from statistics import mode
@@ -52,6 +53,9 @@ import signal
 import os.path
 import platform
 import argparse as ag
+import socket as so
+
+
 
 #vars for script
 class nvar:
@@ -119,6 +123,11 @@ def checkmonitor():
 class flags:
     flag = "mon"
 
+def iptrace():
+    if internet_on() is True:
+        os.system("sudo perl scrp/iptrace.pl")
+    else:
+        nointernetprompt()
 #################################################hardware menu###################################################
 
 hardware_menu_actions  = {}  
@@ -357,11 +366,12 @@ def misc_menu():
     print ("By "+nvar.user+", "+nvar.date)
     print ("Detailed documentation on the cora wiki found on https://github.com/chimerafoundation/befw\n\n")   ##fix 
     print ("[0] Search for a tool.\n")
-    print ("[1] Dev Terminal"+"             [8] Spoof Mac Adress")
-    print ("[2] Send Sms"+"                 [9] Enable Monitor Mode")  
-    print ("[3] Prefabricated Scans"+"      [10] Disable Monitor Mode")
-    print ("[4] Payload Tools"+"            [11] Select a Target Network")
-    print ("[5] Hardware Tools"+"           [12] Show Public IP") 
+    print ("[1] Dev Terminal"
+    )
+    print ("[2] Send Sms")  
+    print ("[3] IP Trace / Geo Trace")
+    print ("[4] Payload Tools")
+    print ("[5] Hardware Tools") 
     print ("[6] Cryptography Tools"+"       [b] back")
     print ("[7] Misc Tools"+"               [x] exit")
     print ("\n")
@@ -387,7 +397,7 @@ def misc_exec_menu(choice):
 
 #back to the main menu when called
 def back():
-    menu_actions['main_menu']()
+    misc_menu_actions['main_menu']()
 
 #exits program when called
 def exit():
@@ -406,9 +416,7 @@ def miscoption2():
     sms()
 
 def miscoption3():
-    print ("option 3")
-    time.sleep(2)
-    misc_menu()
+    iptrace()
 
 def miscoption4():
     print ("option 4")
@@ -628,7 +636,8 @@ def scan_menu():
     print ("[3] Verbose NMAP Scan")
     print ("[4] Bluetooth AP Scan")
     print ("[5] Wireless AP Dump")
-    print ("[6] Gobuster Scan"+"       [b] back")
+    print ("[6] Gobuster Scan")
+    print ("                           [b] back")
     print ("                           [x] exit")
     print ("\n")
     choice = input("\n>>  ")
@@ -1009,7 +1018,20 @@ wifi_menu_actions = {
 
 #check internet connection
 
+def internet_on(host="8.8.8.8", port=53, timeout=3):
 
+    try:
+        so.setdefaulttimeout(timeout)
+        so.socket(so.AF_INET, so.SOCK_STREAM).connect((host, port))
+        return True
+    except so.error as ex:
+        print(ex)
+        return False
+
+def nointernetprompt():
+    clear()
+    print (color.lightred+"This Option Requires Internet.."+color.none)
+    misc_menu()
 #sms messaging
 
 def sms():
@@ -1039,17 +1061,72 @@ def publicip():
 def deselectint():
     print ("deselect net")
 
+#check if a computer only has ethernet
+
+def checkether():
+    if interface == 'eth0':
+        print ("eth0")
+    elif interface == 'eth1':
+        print ("eth1")
+    elif interface == 'eth2':
+        print ("eth2")
+    elif interface == 'eth3':
+        print ("eth3")
+    else:
+        time.sleep(2)
+ 
+#change class to a function and return the value of getinterface to the parent function. change everything that currently says the class and use the function. 
+
 def getinterface():
+    global interface
+    if os.path.isfile("scrp/tmp/int.txt"):
+        interface = sp.getoutput("cat scrp/tmp/int.txt")    
+        main_menu()
+    else:
+        interface = "No Interface Selected"
+        time.sleep(0.1)
+
+
+#fixing error where networkselect.sh cant grab ifac int so the solution is to export iface int from here to a file and grab the file on shell and define a nw variable there
+
+def handlenamechange():
+    checkmonitor()
     global interfacecurrent
-    interfacecurrent = sp.getoutput("sudo python3 scrp/inthandler/rename.py")
+    if checkmode == 0:
+        interfacecurrent = interface
+    elif checkmode == 1:
+        interfacecurrent = interface+flags.flag
+    else:
+        interfacecurrent = "No Interface Selected"
+
+def test():
+    flag = "mon"
+    test = interface+flag
+    print (test)
+
+def exportint():
+    handlenamechange()
+    os.system("echo "+interfacecurrent+" > scrp/tmp/intexport.txt")
+    time.sleep(2)
 
 #show the interface mode
 def showinterface():
-    time.sleep(1) #fix
+    clear()
+    handlenamechange()
+    print ("Currently Selected Interface:"+color.green+ interfacecurrent+color.none)
+    print ("\n\n[1] Main Menu\n")
+    yn = input ("Select an Option: ")
+    if yn == '1':
+        main_menu()
+    else:
+        clear()
+        print ("Invalid Option")
+        time.sleep(1)
+        showinterface()
     
 #function to call script for selecting a network and setting network name to a var
 def selectint():
-    os.system("sudo bash scrp/inthandler/selectint.sh")
+    os.system("sudo bash scrp/iface.sh")
     getinterface()
 
 #function to get the monitor mode and set to a variable
@@ -1079,29 +1156,36 @@ def shownet():
     print("show net")
     time.sleep(2)
 
+#functions for monitor mode
+
+def checkvar():
+    handlenamechange()
+    if interfacecurrent == 'No Interface Selected':
+        print ("Cannot continue no interface selected..")
+        time.sleep(1)
+        print ("Returning to Main Menu..")
+        time.sleep(2)
+        main_menu()
+    else:
+        time.sleep(0.1) 
 
 ######fix####
 
 def monitoron():
-    getinterface()
-    if "mon" in interfacecurrent:
-        print ("You are already in Monitor Mode")
-        time.sleep(2.5)
-        main_menu()
-    else:
-        os.system("sudo bash scrp/inthandler/monitormode.sh")
+    checkvar()
+    nc = handlenamechange()
+    os.system("sudo ifconfig "+nc+" up")
+    os.system("sudo airmon-ng start "+nc)
+    handlenamechange()
     main_menu()
 
 #left off trying to find a way to update the interface variable in order to change interface variable from update after one of these options is chosen
 
 def monitoroff():
-    getinterface()
-    if "mon" in interfacecurrent:
-        os.system("sudo bash scrp/inthandler/managedmode.sh")   
-    else:
-         print ("You are not in Monitor Mode")
-         time.sleep(2.5)
-         main_menu()
+    checkvar()
+    nc = handlenamechange()
+    os.system("sudo ifconfig "+nc+"up")
+    os.system("sudo airmon-ng stop "+nc)
     main_menu()
 
 #functions for spoofing mac# needs to be finished
@@ -1224,6 +1308,14 @@ def devterm():
     elif termlow == "man":
         devtermcoraman()
         devterm()
+    elif termlow == "noanimation":
+        os.system("rm -rf scrp/etc/animationstatus.txt")
+        os.system("echo 1 > scrp/etc/animationstatus.txt")
+        print(color.lightred+"System Settings have changed. Restarting.."+color.none)
+    elif termlow == "yesanimation":
+        os.system("rm -rf scrp/etc/animationstatus.txt")
+        os.system("echo 0 > scrp/etc/animationstatus.txt")
+        print(color.lightred+"System Settings have changed. Restarting.."+color.none)
     else:
         os.system(termlow)
         devterm()
@@ -1271,6 +1363,9 @@ class exceptedforbluetooth:
 
 class exceptedfordevterm:
     wordlist = ['dev']
+
+class exceptedforgeo:
+    wordlist = ['geo', 'geoscan', 'ipscan', 'geo scan', 'ip scan', 'geo trace', 'geotrace', 'iptrace', 'ip trace', 'iptracer', 'ip tracer', 'geo tracer', 'geotracer']
 
 
 #options
@@ -1472,6 +1567,24 @@ def cyphermenu():
         print("invalid option")
         systeminfo()
 
+def geomenu():
+    print ("Found "+color.lightgreen+searchvalue+color.none+" In: ")
+    print ("[1] Misc Tools Menu")
+    print ("\n\n\n[b] Search Again")
+    print ("[x] Main Menu")
+    yesno = input("Select an Option: ")
+    yn = yesno.lower()
+    if yn == 'x':
+        main_menu()
+    elif yn == 'b' :
+        searchvar()
+    elif yn == '1' :
+        misc_menu()
+    else:
+        clear()
+        print("invalid option")
+        systeminfo()
+
 #instand responses
 
 def instantresponseip():
@@ -1509,6 +1622,8 @@ def searchtool(searchvalue):
         wifi()
     elif sv in exceptedfordevterm.wordlist:
         dev()
+    elif sv in exceptedforgeo.wordlist:
+        geomenu()
     else:
         print("The tool you have searched for "+color.red+sv+color.none+" was unable to be found. Try being more concise (Common names of tools.)")
         time.sleep(4.5)
@@ -1523,14 +1638,24 @@ def searchvar():
 
 ######################################################main menu#############################################################
 
+def animation():
+    os.system("python3 scrp/etc/animate.py")
 
 #defines the main menu
 menu_actions  = {}  
 
 def main_menu():
+    handlenamechange()
     handleexit()
-    getinterface()
     clear()
+    astatus = sp.getoutput("cat scrp/etc/animationstatus.txt")
+    if astatus == "0":
+        animation()
+    elif astatus == "1":
+        pass
+    else:
+        print(color.lightred+"Error")
+    clear()    
     print (r""" 
     ████████                              
   ███░░░░░███                             
@@ -1683,15 +1808,16 @@ def check_install():
 #what is done on startup
 def onstartup():
     clear()
+    permissions()
     check_install()
     selectint()
     initialload = "loading "
     print (initialload + nvar.project)
     time.sleep(0.5)
-    if interfacecurrent is None:
+    if interface is None:
         selectint()
     else:
-        time.sleep(0)
+        time.sleep(0.5)
     if os.path.isfile("install.sh"):
         print ("please run the install.sh file in the "+nvar.project+"/ directory")
     else:
