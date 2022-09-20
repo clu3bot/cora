@@ -39,10 +39,11 @@ getos()
 
 #dependencies
 class dependencies:
-    dependencie1 = 'mdk3'
-    dependencie2 = 'aircrack-ng'
-    dependencie3 = 'xterm'
-    dependencie4 = 'macchanger'
+    dependency1 = 'mdk3'
+    dependency2 = 'aircrack-ng'
+    dependency3 = 'xterm'
+    dependency4 = 'macchanger'
+    dependency5 = 'arp-scan'
 
 #general
 prompt1 = 'Install Missing Dependencies? y/n\n'
@@ -94,36 +95,53 @@ def check_macchanger():
 
     return macchanger
 
+def check_arpscan():
+    
+    check_d5 = sp.getoutput("bash etc/dpkg-check/dpkg-check-arpscan.sh")
+
+    if check_d5 == '0':
+        arpscan = 'null'
+    else:
+        arpscan = 'installed'
+
+    return arpscan
+
 def check_all():
 
     mdk3 = check_mdk3()
     aircrack = check_aircrack()
     xterm = check_xterm()
     macchanger = check_macchanger()
+    arpscan = check_arpscan()
 
     #display
 
     clear()
 
     if mdk3 == 'null':
-        print (color.red+dependencies.dependencie1+" (Not Installed)"+color.none)
+        print (color.red+dependencies.dependency1+" (Not Installed)"+color.none)
     else:
-        print (color.green+dependencies.dependencie1+" (Intsalled)"+color.none)
+        print (color.green+dependencies.dependency1+" (Intsalled)"+color.none)
 
     if aircrack == 'null':
-        print (color.red+dependencies.dependencie2+" (Not Installed)"+color.none)
+        print (color.red+dependencies.dependency2+" (Not Installed)"+color.none)
     else:
-        print (color.green+dependencies.dependencie2+" (Intsalled)"+color.none)
+        print (color.green+dependencies.dependency2+" (Intsalled)"+color.none)
 
     if xterm == 'null':
-        print (color.red+dependencies.dependencie3+" (Not Intsalled)"+color.none)
+        print (color.red+dependencies.dependency3+" (Not Intsalled)"+color.none)
     else:
-        print (color.green+dependencies.dependencie3+" (Intsalled)"+color.none)
+        print (color.green+dependencies.dependency3+" (Intsalled)"+color.none)
     
     if macchanger == 'null':
-        print (color.red+dependencies.dependencie4+" (Not Intsalled)"+color.none)
+        print (color.red+dependencies.dependency4+" (Not Intsalled)"+color.none)
     else:
-        print (color.green+dependencies.dependencie4+" (Intsalled)"+color.none)
+        print (color.green+dependencies.dependency4+" (Intsalled)"+color.none)
+
+    if arpscan == 'null':
+        print (color.red+dependencies.dependency5+" (Not Intsalled)"+color.none)
+    else:
+        print (color.green+dependencies.dependency5+" (Intsalled)"+color.none)
 
 def download():
 
@@ -131,6 +149,7 @@ def download():
     aircrack = check_aircrack()
     xterm = check_xterm()
     macchanger = check_macchanger()
+    arpscan = check_arpscan()
 
     download_check_apt = sp.getoutput("command -v apt-get")
     download_check_apk = sp.getoutput("command -v apk")
@@ -204,8 +223,22 @@ def download():
             os.system("sudo pacman -S macchanger")
         else:
             print("Could not locate a package..")
+    elif arpscan == 'null':
+        if packman == 'apt':
+            os.system("sudo apt-get install arp-scan")
+        elif packman == 'apk':
+            os.system("sudo apk add arp-scan")
+        elif packman == 'dnf':
+            os.system("sudo dnf install arp-scan")
+        elif packman == 'zypper':
+            os.system("sudo zypper install arp-scan")
+        elif packman == 'pacman':
+            os.system("sudo pacman -S arp-scan")
+        else:
+            print("Could not locate a package..")
     else:
         print ("Could not locate a package.")
+    
 
 def ask():
     a = input(prompt1)
@@ -225,6 +258,7 @@ def prompt():
     aircrack = check_aircrack()
     xterm = check_xterm()
     macchanger = check_macchanger()
+    arpscan = check_arpscan()
 
     if mdk3 == 'null':
         check = 0
@@ -233,6 +267,8 @@ def prompt():
     elif xterm == 'null':
         check = 0
     elif macchanger == 'null':
+        check = 0
+    elif arpscan == 'null':
         check = 0
     else:
         check = 1
@@ -253,6 +289,7 @@ def initialload():
     check_aircrack()
     check_xterm()
     check_macchanger()
+    check_arpscan()
     check_all()
     prompt()
     export_done_flag()
