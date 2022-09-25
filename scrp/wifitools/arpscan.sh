@@ -1,7 +1,7 @@
 #!/bin/bash
 
 getvar() {
-    int=$(cat tmp/int.txt)
+int=$(sudo python3 scrp/inthandler/rename.py)
 }
 
 #saves the output of the arp scan
