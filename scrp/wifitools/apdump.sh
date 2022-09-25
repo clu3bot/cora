@@ -2,7 +2,7 @@
 
 
 getvar() {
-    int=$(cat tmp/int.txt)
+    int=$(sudo python3 scrp/inthandler/rename.py)
 }
 
 apdump() {
