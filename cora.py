@@ -108,18 +108,6 @@ def getmode():
     global modeint
     modeint = sp.getoutput("sudo bash scrp/checkmode.sh")
 
-
-def checkmonitor():
-    cm = sp.getoutput("sudo bash scrp/checkmode.sh")
-
-    global checkmode
-    if cm == "Monitor":
-        checkmode = 1
-    elif cm == "Managed":
-        checkmode = 0
-    else:
-        print ("Error")
-
 class flags:
     flag = "mon"
 
@@ -800,106 +788,13 @@ bluetooth_menu_actions = {
     'x': exit,
 }
 
-
-#beacon spam fix a few things since this code was moved from another directory
-
-def beaconmonitor():
-    response = input("Would you like to enable Monitor Mode? (Y/N)")
-
-    lowresponse = response.lower()
-    if lowresponse == 'y':
-        clear()
-        os.system("sudo airmon-ng start "+interface)
-        beaconspam()
-
-    elif lowresponse == 'n':
-        clear()
-        print ("This part of the program requires Monitor Mode")
-        userinp = input ("Press Y to enable monitor or Press X to return to Main Menu..")
-        lowuserinp = userinp.lower()
-        if lowuserinp == "y":
-            os.system("sudo airmon-ng start "+interface)
-        elif lowuserinp == "x":
-            clear()
-            print ("Returning to Main Menu..")
-            main_menu()
-        else:
-            clear()
-            print ("Invalid Option..")
-            beaconmonitor()
-    else:
-        clear()
-        print ("Invalid Option..")
-        beaconmonitor()
-
-def beaconcheckmode():
-    checkmonitor()
-    if checkmode == 1:
-        time.sleep(0)
-    elif checkmode == 0:
-        beaconmonitor()
-    else:
-        print("An error has occured")
-
-def beaconrandomnames():
+def monitor_require():
     clear()
-    beaconcheckmode()
-    print ("Starting..")
-    time.sleep(0.5)
-    print (color.lightgreen+"[Beacon Spam Active]"+color.none)
-    os.system("sudo mdk3 "+interface+" b -s 500")
-
-def beaconnamesfile():
-    clear()
-    beaconcheckmode()
-    print ("File must be located in "+color.lightred+" /cora/scrp/wifitools/ess"+color.none)
-    if os.path.isfile("scrp/wifitools/tmp/file.txt"):
-        clear()
-        defaultfile = sp.getoutput("cat scrp/wifitools/tmp/file.txt")
-        ask = input("File "+defaultfile+" is currently set as your default names file, is this the file you would like to use? (Y/N)")
-        asklower = ask.lower()
-        if asklower == "y":
-            time.sleep(1)
-        elif asklower == "n":
-            clear()
-            print ("File must be located in "+color.lightred+" /cora/scrp/wifitools/ess"+color.none)
-            file = input ("What is the name of the file Including file extention. Example "+color.lightgreen+"file.txt"+color.none+": ")
-        else:
-            clear()
-            print ("File must be located in "+color.lightred+" /cora/scrp/wifitools/ess"+color.none)
-            file = input ("What is the name of the file Including file extention. Example "+color.lightgreen+"file.txt"+color.none+": ")
-
-    if os.path.isfile("/ess/"+file):
-        question = input ("Would you like to set this File as your Default File? (Y/N)")
-
-        lowquestion = question.lower()
-        if lowquestion == "y":
-            os.system("echo "+file+" > scrp/wifitools/tmp/file.txt")
-        elif lowquestion == "n":
-            time.sleep(1)
-        else:
-            print("Invalid Option..")
-    else:
-        clear()
-        print("File could not located in "+color.lightred+"/cora/scrp/wifitools/ess"+color.none)
-        time.sleep(4)
-        beaconnamesfile()       
-
+    
 
 def beaconspam():
-    beaconcheckmode()
-    print ("Beacon Flood Options:\n\n")
-    print ("[1] Use Random Names")
-    print ("[2] Use a Names File")
-    i = input ("\n\nChoose an Option: ")
-
-    if i == "1":
-        beaconrandomnames()
-    elif i == "2":
-        beaconnamesfile()
-    else:
-        print ("Invalid Option")
-
+    monitorprompt()
+    os.system("sudo python3 scrp/wifitools/beacon.py")
 #authdos
 
 def authdos():
@@ -1098,7 +993,7 @@ def getinterface():
 #fixing error where networkselect.sh cant grab ifac int so the solution is to export iface int from here to a file and grab the file on shell and define a nw variable there
 
 def handlenamechange():
-    checkmonitor()
+    monitorprompt()
     global interfacecurrent
     interfacecurrent = sp.getoutput("sudo python3 scrp/inthandler/rename.py")
 
@@ -1805,7 +1700,7 @@ def check_install():
 def updateprompt():
     clear()
     print ("Would you like to check for updates? (y/n)")
-    updatechoice = input("\n")
+    updatechoice = input(":")
     if updatechoice.lower() == "y":
         update()
     elif updatechoice.lower() == "n":
@@ -1818,26 +1713,36 @@ def updateprompt():
 
 def monitorprompt():
     clear()
-    print ("Note:"+color.lightred+" WiFi tools require Monitor mode"+color.none)
-    print ("Would you like to enable Monitor Mode? (y/n)")
-    monchoice = input("\n")
-    if monchoice.lower() == "y":
-        monitormode()
-    elif monchoice.lower() == "n":
-        time.sleep(0.1)
+
+    if os.path.exists("scrp/tmp/int.txt"):
+        interface = sp.getoutput("cat scrp/tmp/int.txt")
+        if "mon" in interface:
+            time.sleep(0.1)
+        else:
+            print ("Note:"+color.lightred+" WiFi tools require Monitor mode"+color.none)
+            print ("Would you like to enable Monitor Mode? (y/n)")
+            monchoice = input(":")
+            if monchoice.lower() == "y":
+                monitormode()
+            elif monchoice.lower() == "n":
+                time.sleep(0.1)
+            else:
+                clear()
+                print (color.lightred+"Invalid Selection.."+color.none)
+                time.sleep(2)
+                monitorprompt()
     else:
-        clear()
-        print (color.lightred+"Invalid Selection.."+color.none)
-        time.sleep(2)
-        monitorprompt()
+        interface = "None"
+        print ("Interface value "+color.lightred+interface+color.none+". No interface Selected.")
+
 
 #what is done on startup
 def onstartup():
     clear()
     permissions()
+    check_install()
     updateprompt()
     monitorprompt()
-    check_install()
     selectint()
 
     initialload = "loading "
