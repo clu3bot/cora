@@ -128,6 +128,14 @@ def iptrace():
         os.system("sudo perl scrp/iptrace.pl")
     else:
         nointernetprompt()
+
+def check_essid():
+    if os.path.exists("scrp/tmp/essid.txt"):
+        essid = sp.getoutput("cat scrp/tmp/essid.txt")
+        return essid
+    else:
+        essid = "N/A"
+        return essid
 #################################################hardware menu###################################################
 
 hardware_menu_actions  = {}  
@@ -1092,12 +1100,7 @@ def getinterface():
 def handlenamechange():
     checkmonitor()
     global interfacecurrent
-    if checkmode == 0:
-        interfacecurrent = interface
-    elif checkmode == 1:
-        interfacecurrent = interface+flags.flag
-    else:
-        interfacecurrent = "No Interface Selected"
+    interfacecurrent = sp.getoutput("sudo python3 scrp/inthandler/rename.py")
 
 def test():
     flag = "mon"
@@ -1126,7 +1129,7 @@ def showinterface():
     
 #function to call script for selecting a network and setting network name to a var
 def selectint():
-    os.system("sudo bash scrp/iface.sh")
+    os.system("sudo bash scrp/inthandler/selectint.sh")
     getinterface()
 
 #function to get the monitor mode and set to a variable
@@ -1172,20 +1175,13 @@ def checkvar():
 ######fix####
 
 def monitoron():
-    checkvar()
-    nc = handlenamechange()
-    os.system("sudo ifconfig "+nc+" up")
-    os.system("sudo airmon-ng start "+nc)
-    handlenamechange()
+    os.system("sudo bash scrp/inthandler/monitormode.sh")
     main_menu()
 
 #left off trying to find a way to update the interface variable in order to change interface variable from update after one of these options is chosen
 
 def monitoroff():
-    checkvar()
-    nc = handlenamechange()
-    os.system("sudo ifconfig "+nc+"up")
-    os.system("sudo airmon-ng stop "+nc)
+    os.system("sudo bash scrp/inthandler/managedmode.sh")
     main_menu()
 
 #functions for spoofing mac# needs to be finished
@@ -1648,6 +1644,7 @@ def main_menu():
     handlenamechange()
     handleexit()
     clear()
+    essid = check_essid()
     astatus = sp.getoutput("cat scrp/etc/animationstatus.txt")
     if astatus == "0":
         animation()
@@ -1666,7 +1663,7 @@ def main_menu():
  ░░█████████ ░░██████  █████    ░░████████
   ░░░░░░░░░   ░░░░░░  ░░░░░      ░░░░░░░░ 
   """)
-    print ("By "+nvar.user+", "+nvar.date+ "       Version: "+color.green+ nvar.version+color.none+"     Interface: "+color.green+interfacecurrent+color.none)
+    print ("By "+nvar.user+", "+nvar.date+ "       Version: "+color.green+ nvar.version+color.none+"     Interface: "+color.green+interfacecurrent+color.none+    "Network: "+color.green+essid+color.none)
     print ("Detailed documentation on the cora wiki found on https://github.com/clu3bot/cora\n\n")   ##fix 
     print ("[0] Search for a tool.\n")
     print ("[1] WiFi Tools"+"               [8] Spoof Mac Adress")
@@ -1769,7 +1766,7 @@ def option14():
     sysinfo()
 
 def update():
-    os.system("sudo bash updates.pl")
+    os.system("sudo bash updates.sh")
 #binds the options to numbers
 menu_actions = {
     'main_menu': main_menu,
@@ -1805,12 +1802,44 @@ def check_install():
 
 #possible problem because selectint isnt returned
 
+def updateprompt():
+    clear()
+    print ("Would you like to check for updates? (y/n)")
+    updatechoice = input("\n")
+    if updatechoice.lower() == "y":
+        update()
+    elif updatechoice.lower() == "n":
+        time.sleep(0.1)
+    else:
+        clear()
+        print (color.lightred+"Invalid Selection.."+color.none)
+        time.sleep(2)
+        updateprompt()
+
+def monitorprompt():
+    clear()
+    print ("Note:"+color.lightred+" WiFi tools require Monitor mode"+color.none)
+    print ("Would you like to enable Monitor Mode? (y/n)")
+    monchoice = input("\n")
+    if monchoice.lower() == "y":
+        monitormode()
+    elif monchoice.lower() == "n":
+        time.sleep(0.1)
+    else:
+        clear()
+        print (color.lightred+"Invalid Selection.."+color.none)
+        time.sleep(2)
+        monitorprompt()
+
 #what is done on startup
 def onstartup():
     clear()
     permissions()
+    updateprompt()
+    monitorprompt()
     check_install()
     selectint()
+
     initialload = "loading "
     print (initialload + nvar.project)
     time.sleep(0.5)
