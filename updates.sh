@@ -10,7 +10,7 @@ ewr() {
 
 check_for_updates () {
     ewr "Checking for updates"
-        while [ "$(git stash --include-untracked | git reset --hard | git pull https://github.com/clu3bot/owt.git > git.txt)" ]; do
+        while [ "$(git stash --include-untracked | git reset --hard | git pull https://github.com/clu3bot/cora.git > git.txt)" ]; do
             ewr "[Checking updates for Cora]"
                 ewr "\nPlease wait.."
         done;
