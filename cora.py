@@ -790,7 +790,7 @@ bluetooth_menu_actions = {
 
 def monitor_require():
     clear()
-    
+
 
 def beaconspam():
     monitorprompt()
@@ -993,18 +993,13 @@ def getinterface():
 #fixing error where networkselect.sh cant grab ifac int so the solution is to export iface int from here to a file and grab the file on shell and define a nw variable there
 
 def handlenamechange():
-    monitorprompt()
     global interfacecurrent
     interfacecurrent = sp.getoutput("sudo python3 scrp/inthandler/rename.py")
-
-def test():
-    flag = "mon"
-    test = interface+flag
-    print (test)
 
 def exportint():
     handlenamechange()
     os.system("echo "+interfacecurrent+" > scrp/tmp/intexport.txt")
+    os.system("echo "+interfacecurrent+" > scrp/wifitools/tmp/int.txt")
     time.sleep(2)
 
 #show the interface mode
@@ -1713,27 +1708,23 @@ def updateprompt():
 
 def monitorprompt():
     clear()
-
-    if os.path.exists("scrp/tmp/int.txt"):
-        interface = sp.getoutput("cat scrp/tmp/int.txt")
-        if "mon" in interface:
+    exportint()
+    handlenamechange()
+    if "mon" in interfacecurrent:
+        time.sleep(0.1)
+    else:
+        print ("Note:"+color.lightred+" WiFi tools require Monitor mode"+color.none)
+        print ("Would you like to enable Monitor Mode? (y/n)")
+        monchoice = input(":")
+        if monchoice.lower() == "y":
+            monitormode()
+        elif monchoice.lower() == "n":
             time.sleep(0.1)
         else:
-            print ("Note:"+color.lightred+" WiFi tools require Monitor mode"+color.none)
-            print ("Would you like to enable Monitor Mode? (y/n)")
-            monchoice = input(":")
-            if monchoice.lower() == "y":
-                monitormode()
-            elif monchoice.lower() == "n":
-                time.sleep(0.1)
-            else:
-                clear()
-                print (color.lightred+"Invalid Selection.."+color.none)
-                time.sleep(2)
-                monitorprompt()
-    else:
-        interface = "None"
-        print ("Interface value "+color.lightred+interface+color.none+". No interface Selected.")
+            clear()
+            print (color.lightred+"Invalid Selection.."+color.none)
+            time.sleep(2)
+            monitorprompt()
 
 
 #what is done on startup
