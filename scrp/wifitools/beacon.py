@@ -19,8 +19,7 @@ def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 global interface 
-interface = sp.getoutput("cat wifitools/tmp/int.txt")
-
+interface = sp.getoutput("cat scrp/wifitools/tmp/int.txt")
 
 def beaconrandomnames():
     clear()
@@ -32,37 +31,41 @@ def beaconrandomnames():
 def beaconnamesfile():
     clear()
     print ("File must be located in "+color.lightred+" /cora/scrp/wifitools/ess"+color.none)
-    if os.path.isfile("scrp/wifitools/tmp/file.txt"):
-        clear()
-        defaultfile = sp.getoutput("cat scrp/wifitools/tmp/file.txt")
-        ask = input("File "+defaultfile+" is currently set as your default names file, is this the file you would like to use? (Y/N)")
-        asklower = ask.lower()
-        if asklower == "y":
-            time.sleep(1)
-        elif asklower == "n":
-            clear()
-            print ("File must be located in "+color.lightred+" /cora/scrp/wifitools/ess"+color.none)
-            file = input ("What is the name of the file Including file extention. Example "+color.lightgreen+"file.txt"+color.none+": ")
-        else:
-            clear()
-            print ("File must be located in "+color.lightred+" /cora/scrp/wifitools/ess"+color.none)
-            file = input ("What is the name of the file Including file extention. Example "+color.lightgreen+"file.txt"+color.none+": ")
+    if os.path.isfile("scrp/wifitools/ess/file.txt"):
+        defaultfile = sp.getoutput("scrp/wifitools/ess/file.txt")
+    else:
+        defaultfile = "Null"
 
-    if os.path.isfile("/ess/"+file):
+    ask = input("File "+color.lightred+defaultfile+color.none+" is currently set as your default names file, is this the file you would like to use? (Y/N)")
+    asklower = ask.lower()
+    if asklower == "y":
+        time.sleep(1)
+    elif asklower == "n":
+        clear()
+        print ("File must be located in "+color.lightred+" /cora/scrp/wifitools/ess"+color.none)
+        file = input ("What is the name of the file Including file extention. Example "+color.lightgreen+"file.txt"+color.none+": ")
+    else:
+        clear()
+        print ("File must be located in "+color.lightred+" /cora/scrp/wifitools/ess"+color.none)
+        file = input ("What is the name of the file Including file extention. Example "+color.lightgreen+"file.txt"+color.none+": ")
+
+    if os.path.isfile("scrp/wifitools/ess/"+file):
         question = input ("Would you like to set this File as your Default File? (Y/N)")
 
         lowquestion = question.lower()
         if lowquestion == "y":
-            os.system("echo "+file+" > scrp/wifitools/tmp/file.txt")
+            os.system("echo "+file+" > scrp/wifitools/ess/file.txt")
         elif lowquestion == "n":
             time.sleep(1)
         else:
             print("Invalid Option..")
     else:
         clear()
-        print("File could not located in "+color.lightred+"/cora/scrp/wifitools/ess"+color.none)
+        print("File could not be located in "+color.lightred+"/cora/scrp/wifitools/ess"+color.none)
         time.sleep(4)
-        beaconnamesfile()       
+        beaconnamesfile()
+
+    
 
 
 def beaconspam():
@@ -78,4 +81,6 @@ def beaconspam():
         beaconnamesfile()
     else:
         print ("Invalid Option")
+
+beaconspam()
 
